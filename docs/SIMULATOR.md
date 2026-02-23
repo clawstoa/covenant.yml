@@ -1,6 +1,6 @@
 # Simulator Guide
 
-This document describes the Covenant simulation tool implemented in `src/simulator/`, the `covenant simulate` CLI command, and the static UI in `site/simulator.html`.
+This document describes the Covenant simulation tool implemented in `src/simulator/`, the `covenant simulate` CLI command, and the static UI in `docs/simulator.html`.
 
 ## Purpose
 
@@ -41,7 +41,7 @@ pnpm build:simulator
 
 2. Open:
 
-- `site/simulator.html`
+- `docs/simulator.html`
 
 The UI supports:
 
@@ -133,7 +133,7 @@ Applying a story choice creates a next synthetic event and re-evaluates policy o
 - `story.js`: deterministic choice generation and application
 - `export.js`: JSON/CSV export helpers
 - `index.js`: subsystem public API
-- `browser-entry.js`: browser bundle entry consumed by `site/simulator.js`
+- `browser-entry.js`: browser bundle entry consumed by `docs/simulator.js`
 
 ## Boundary With `src/core`
 

@@ -15,19 +15,19 @@ jobs:
         run: |
           set -euo pipefail
           expected=(
-            site/badges/covenant/covenant-enabled.svg
-            site/badges/agent-pr-policy/allow.svg
-            site/badges/agent-pr-policy/warn.svg
-            site/badges/agent-pr-policy/deny.svg
-            site/badges/agent-pr-policy/none.svg
-            site/badges/provenance-policy/required.svg
-            site/badges/provenance-policy/configured.svg
-            site/badges/provenance-policy/none.svg
-            site/badges/attestation-required/required.svg
-            site/badges/attestation-required/agents.svg
-            site/badges/attestation-required/none.svg
-            site/badges/thread-intervention-policy/controlled.svg
-            site/badges/thread-intervention-policy/open.svg
+            docs/badges/covenant/covenant-enabled.svg
+            docs/badges/agent-pr-policy/allow.svg
+            docs/badges/agent-pr-policy/warn.svg
+            docs/badges/agent-pr-policy/deny.svg
+            docs/badges/agent-pr-policy/none.svg
+            docs/badges/provenance-policy/required.svg
+            docs/badges/provenance-policy/configured.svg
+            docs/badges/provenance-policy/none.svg
+            docs/badges/attestation-required/required.svg
+            docs/badges/attestation-required/agents.svg
+            docs/badges/attestation-required/none.svg
+            docs/badges/thread-intervention-policy/controlled.svg
+            docs/badges/thread-intervention-policy/open.svg
           )
           for path in "${expected[@]}"; do
             if [[ ! -f "$path" ]]; then
@@ -35,9 +35,9 @@ jobs:
               exit 1
             fi
           done
-          count="$(find site/badges -type f -name '*.svg' | wc -l | tr -d ' ')"
+          count="$(find docs/badges -type f -name '*.svg' | wc -l | tr -d ' ')"
           if [[ "$count" != "13" ]]; then
-            echo "Expected 13 SVG badge files under site/badges, found $count"
+            echo "Expected 13 SVG badge files under docs/badges, found $count"
             exit 1
           fi
       - uses: actions/setup-node@v4

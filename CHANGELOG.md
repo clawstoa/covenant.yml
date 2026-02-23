@@ -30,13 +30,13 @@ Covenant v1 tooling uses [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - GitHub event normalization adapter (`src/github/adapter.js`): maps GitHub webhooks to canonical event envelopes.
 - Badge generator (`src/core/badges.js`): produces JSON and Shields.io badge descriptors.
 - Simulator (`src/simulator/`): generates synthetic event streams, story-mode guided scenarios, and exports JSON/CSV metrics.
-- Browser-based policy playground (`site/index.html`) and simulation lab (`site/simulator.html`).
+- Browser-based policy playground (`docs/index.html`) and simulation lab (`docs/simulator.html`).
 
 **Site**
-- Public specification site (`site/`) with overview, catalog, operator guide, spec, simulator, and contribution pages.
+- Public specification site (`docs/`) with overview, catalog, operator guide, spec, simulator, and contribution pages.
 - Policy catalog with real-world stance examples (accepting, restricting, rejecting).
 - Spec page improvements: sticky in-page TOC, didactic section guidance, and explanatory field tables/tooltips.
-- LLM discovery index at `site/llm.txt`.
+- LLM discovery index at `docs/llm.txt`.
 
 **Documentation**
 - Agent governance guide consolidated at `docs/AGENT_GOVERNANCE.md`.
@@ -62,3 +62,6 @@ Covenant v1 follows a strict compatibility commitment:
 - Minor releases (`1.x.0`): additive schema extensions; existing valid policies remain valid.
 - Major releases (`2.0.0`): may include breaking schema changes; migration guide will be provided.
 
+---
+
+*Earlier internal development history is in `.internal/covenant-plan.md`.*

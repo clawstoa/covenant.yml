@@ -48,7 +48,7 @@ All pull requests must:
 
 1. Pass `pnpm test`.
 2. Pass `node bin/covenant.js validate covenant.yml` (if modifying the policy file).
-3. Not introduce regressions in the schema, evaluator, enforcement engine, or site/docs consistency.
+3. Not introduce regressions in the schema, evaluator, enforcement engine, or docs consistency.
 
 ---
 

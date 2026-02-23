@@ -1,0 +1,20 @@
+<svg width="420" height="70" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1f17"/>
+      <stop offset="100%" stop-color="#1f4037"/>
+    </linearGradient>
+    <linearGradient id="state2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="70" rx="10" fill="url(#bg2)"/>
+  <rect x="280" width="140" height="70" rx="10" fill="url(#state2)"/>
+  <text x="25" y="42" font-family="monospace" font-size="15" fill="#dcfce7">
+    agent-pr-policy
+  </text>
+  <text x="315" y="42" font-family="monospace" font-size="16" fill="#ffffff">
+    allow
+  </text>
+</svg>

@@ -7,7 +7,7 @@ This file provides a curated map of the Covenant project for LLM and agent use. 
 ## Core Site Pages
 
 - [Overview](https://clawstoa.github.io/covenant.yml/index.html): Project overview, interaction matrix, playground, and badge catalog.
-- [Specification](https://clawstoa.github.io/covenant.yml/spec.html): Browser-friendly Covenant v1 specification.
+- [Specification (site)](https://clawstoa.github.io/covenant.yml/spec.html): Browser-friendly Covenant v1 specification.
 - [Policy Catalog](https://clawstoa.github.io/covenant.yml/catalog.html): Real-world AI contribution policy mappings.
 - [Operators](https://clawstoa.github.io/covenant.yml/operators.html): Agent operator checklist and policy compliance guidance.
 - [Simulator](https://clawstoa.github.io/covenant.yml/simulator.html): Deterministic simulation UI for policy behavior.

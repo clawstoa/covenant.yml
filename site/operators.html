@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent Operator Guide | Covenant v1</title>
+  <meta name="description" content="Compliance checklist for agent operators interacting with Covenant-governed repositories.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html">Overview</a>
+    <a href="./catalog.html">Catalog</a>
+    <a href="./operators.html" class="active">Operators</a>
+    <a href="./contribute.html">Contribute</a>
+    <a href="./spec.html">Spec</a>
+    <a href="./simulator.html">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Agent Operator Guide</p>
+    <h1>Compliance checklist for agent developers</h1>
+    <p class="lead">
+      Before your agent contributes to a repository, check its <code>covenant.yml</code>. This guide explains how to read, evaluate, and comply with the policy.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Pre-Contribution Checklist</h2>
+      <ol class="checklist">
+        <li>
+          <strong>Fetch the policy file.</strong>
+          <p>Check for <code>/covenant.yml</code> at the repository root. If absent, treat the repository as unspecified (no Covenant governance applies).</p>
+          <pre><code>curl -sf https://raw.githubusercontent.com/{owner}/{repo}/main/covenant.yml</code></pre>
+        </li>
+        <li>
+          <strong>Parse and validate the policy.</strong>
+          <p>Use a YAML parser. Validate the structure against the <a href="../schema/covenant.schema.json">Covenant.yml v1.0.0 JSON Schema</a>.</p>
+        </li>
+        <li>
+          <strong>Determine your intended action.</strong>
+          <p>Map your planned operation to a Covenant canonical action:</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Operation</th><th>Canonical Action</th></tr></thead>
+              <tbody>
+                <tr><td>Open a pull request</td><td><code>pull_request.open</code></td></tr>
+                <tr><td>Push to an existing PR</td><td><code>pull_request.update</code></td></tr>
+                <tr><td>Submit a review</td><td><code>pull_request.review.submit</code></td></tr>
+                <tr><td>Approve a PR</td><td><code>pull_request.review.approve</code></td></tr>
+                <tr><td>Merge a PR</td><td><code>pull_request.merge</code></td></tr>
+                <tr><td>Open an issue</td><td><code>issue.open</code></td></tr>
+                <tr><td>Comment on an issue</td><td><code>issue.comment</code></td></tr>
+                <tr><td>Label an issue</td><td><code>issue.label</code></td></tr>
+                <tr><td>Close/fix an issue</td><td><code>issue.solve</code></td></tr>
+                <tr><td>Comment on a human thread</td><td><code>conversation.intervene_human_thread</code></td></tr>
+                <tr><td>Comment on an agent thread</td><td><code>conversation.intervene_agent_thread</code></td></tr>
+                <tr><td>Clean up (close PR, delete branch)</td><td><code>maintenance.cleanup</code></td></tr>
+                <tr><td>Reroute to develop-bot branch</td><td><code>routing.to_develop_bot</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </li>
+        <li>
+          <strong>Evaluate the policy against your action.</strong>
+          <p>Construct a canonical event envelope and evaluate it against the policy rules. The outcome will be <code>allow</code>, <code>warn</code>, or <code>deny</code>.</p>
+          <pre><code>{
+  "action": "pull_request.open",
+  "actor": {
+    "id": "your-agent[bot]",
+    "kind": "agent"
+  },
+  "repository": {
+    "name": "your-org/your-repo",
+    "visibility": "public"
+  },
+  "target": {
+    "branch": "main"
+  },
+  "evidence": {
+    "model": "claude-opus-4-6",
+    "provider": "anthropic",
+    "prompt_record": "prompt://session/abc123",
+    "test_proof": "tests://ci/run/456"
+  }
+}</code></pre>
+        </li>
+        <li>
+          <strong>Respect the outcome.</strong>
+          <ul>
+            <li><code>allow</code> — proceed with the action.</li>
+            <li><code>warn</code> — proceed but expect the action to be flagged.</li>
+            <li><code>deny</code> — do not perform the action.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>Evidence Fields</h2>
+      <p>When a policy requires provenance, attach these fields to your contribution metadata:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>model</code></td>
+              <td>Exact model identifier used to generate the contribution.</td>
+              <td><code>claude-opus-4-6</code></td>
+            </tr>
+            <tr>
+              <td><code>provider</code></td>
+              <td>The provider or platform hosting the model.</td>
+              <td><code>anthropic</code></td>
+            </tr>
+            <tr>
+              <td><code>prompt_record</code></td>
+              <td>URI or reference to the prompt session that produced this work.</td>
+              <td><code>prompt://session/abc123</code></td>
+            </tr>
+            <tr>
+              <td><code>test_proof</code></td>
+              <td>URI or reference to passing test results.</td>
+              <td><code>tests://ci/run/456</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Attestation</h2>
+      <p>When a policy requires attestation, sign a <code>covenant.attestation.v1</code> payload before submitting your contribution.</p>
+      <h3>Signed Payload Structure</h3>
+      <pre><code>{
+  "version": "covenant.attestation.v1",
+  "actor_id": "your-agent[bot]",
+  "action": "pull_request.open",
+  "repository": "owner/repo",
+  "ref": "refs/heads/feature-branch",
+  "policy_sha256": "sha256-of-covenant-yml",
+  "timestamp": "2026-02-21T00:00:00Z",
+  "nonce": "unique-random-string"
+}</code></pre>
+      <h3>Verification Requirements</h3>
+      <ul>
+        <li>Signature algorithm: Ed25519.</li>
+        <li>Public key must be registered in <code>actors.agents[].verification</code> in the target repo's <code>covenant.yml</code>.</li>
+        <li>Timestamp must be within <code>attestation.max_age_seconds</code> of evaluation time.</li>
+        <li>Nonce must not have been used within <code>attestation.nonce_ttl_seconds</code>.</li>
+        <li>Policy hash must match the current <code>covenant.yml</code> SHA-256.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Thread Mode Awareness</h2>
+      <p>Repositories may label discussion threads with mode indicators:</p>
+      <ul>
+        <li><code>thread:human</code> — human-only conversation. Agent intervention typically denied.</li>
+        <li><code>thread:agent</code> — agent-primary conversation. Participation typically allowed.</li>
+        <li>No label — mixed mode. Policy rules determine access.</li>
+      </ul>
+      <p>Before commenting on a thread, check for thread mode labels and evaluate the corresponding canonical action (<code>conversation.intervene_human_thread</code> or <code>conversation.intervene_agent_thread</code>).</p>
+    </section>
+
+    <section class="panel">
+      <h2>Reading Badges</h2>
+      <p>Covenant-governed repositories display CI-verified badges. Use these for quick policy assessment:</p>
+      <p>Help text below focuses on the four policy-decision badges; <code>covenant-enabled</code> is always <code>enabled</code> when Covenant is active.</p>
+      <div class="badge-legend-grid">
+        <article class="badge-legend-item">
+          <h3><code>agent-pr-policy</code></h3>
+          <p>Shows the strictest policy outcome for agent-authored pull requests.</p>
+          <p class="badge-legend-examples">Practical example: a human asks an agent to open a PR; <code>allow</code> means it can proceed, <code>warn</code> means it opens with policy warnings, and <code>deny</code> means the PR is blocked.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>provenance-policy</code></h3>
+          <p>Shows whether a default provenance profile enforces evidence fields.</p>
+          <p class="badge-legend-examples">Practical example: an agent opens a PR; with <code>required</code> it must include evidence like <code>model</code> and <code>provider</code>, while <code>none</code> means those fields are not enforced.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>attestation-required</code></h3>
+          <p>Indicates whether cryptographic attestation signatures are required.</p>
+          <p class="badge-legend-examples">Practical example: when an agent submits a PR, <code>required</code> or <code>agents</code> means it must attach a valid signed attestation payload or policy checks fail.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>thread-intervention-policy</code></h3>
+          <p>Shows whether intervention in human threads is restricted.</p>
+          <p class="badge-legend-examples">Practical example: in a human-only incident thread, <code>controlled</code> means an agent comment is warned or denied unless explicitly allowed.</p>
+        </article>
+      </div>
+      <div class="badge-catalog">
+        <div class="badge-category">
+          <h3>covenant</h3>
+          <div class="badge-stack">
+            <img src="./badges/covenant/covenant-enabled.svg" alt="covenant: enabled" width="420" height="70">
+          </div>
+        </div>
+        <div class="badge-category">
+          <h3>agent-pr-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/agent-pr-policy/allow.svg" alt="agent-pr-policy: allow" width="420" height="70">
+            <img src="./badges/agent-pr-policy/warn.svg" alt="agent-pr-policy: warn" width="420" height="70">
+            <img src="./badges/agent-pr-policy/deny.svg" alt="agent-pr-policy: deny" width="420" height="70">
+            <img src="./badges/agent-pr-policy/none.svg" alt="agent-pr-policy: none" width="420" height="70">
+          </div>
+        </div>
+        <div class="badge-category">
+          <h3>provenance-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/provenance-policy/required.svg" alt="provenance-policy: required" width="420" height="70">
+            <img src="./badges/provenance-policy/configured.svg" alt="provenance-policy: configured" width="420" height="70">
+            <img src="./badges/provenance-policy/none.svg" alt="provenance-policy: none" width="420" height="70">
+          </div>
+        </div>
+        <div class="badge-category">
+          <h3>attestation-required</h3>
+          <div class="badge-stack">
+            <img src="./badges/attestation-required/required.svg" alt="attestation-required: required" width="420" height="70">
+            <img src="./badges/attestation-required/agents.svg" alt="attestation-required: agents" width="420" height="70">
+            <img src="./badges/attestation-required/none.svg" alt="attestation-required: none" width="420" height="70">
+          </div>
+        </div>
+        <div class="badge-category">
+          <h3>thread-intervention-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/thread-intervention-policy/controlled.svg" alt="thread-intervention-policy: controlled" width="420" height="70">
+            <img src="./badges/thread-intervention-policy/open.svg" alt="thread-intervention-policy: open" width="420" height="70">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+  <script src="./highlight.js"></script>
+</body>
+</html>

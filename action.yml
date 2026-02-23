@@ -1,0 +1,25 @@
+name: Covenant Policy Check
+description: Evaluate repository interactions against covenant.yml deterministically.
+inputs:
+  policy-path:
+    description: Path to covenant policy file
+    required: false
+    default: covenant.yml
+  event-json:
+    description: Canonical event JSON string or path. If omitted, uses GitHub event payload.
+    required: false
+    default: ""
+  mode:
+    description: report or enforce
+    required: false
+    default: report
+outputs:
+  decision:
+    description: Final policy decision (allow, warn, deny)
+  reason_codes:
+    description: JSON array of reason codes
+  enforcement_actions:
+    description: JSON array of planned enforcement actions
+runs:
+  using: node20
+  main: src/github-action.js

@@ -107,7 +107,7 @@ An agent PR denied on a protected branch is rerouted to `develop-agent` via rout
 
 ## Simulation Lab Type Mapping
 
-The static simulator (`site/simulator.html`) uses higher-level contribution types and maps them into canonical Covenant actions before replay:
+The static simulator (`docs/simulator.html`) uses higher-level contribution types and maps them into canonical Covenant actions before replay:
 
 | Simulator Type | Default Canonical Action |
 |---|---|

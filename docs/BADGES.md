@@ -94,51 +94,51 @@ For dynamic badges backed by CI artifacts, configure a Shields endpoint pointing
 
 ### Option B: Custom SVG badges from this repository
 
-All static badge SVG files live under `site/badges/` and can be embedded directly with raw GitHub URLs:
+All static badge SVG files live under `docs/badges/` and can be embedded directly with raw GitHub URLs:
 
 ```text
-https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/<category>/<value>.svg
+https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/<category>/<value>.svg
 ```
 
 Example:
 
 ```markdown
-![covenant](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/covenant/covenant-enabled.svg)
-![agent-pr-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/warn.svg)
-![provenance-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/provenance-policy/required.svg)
-![attestation-required](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/attestation-required/required.svg)
-![thread-intervention-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/thread-intervention-policy/controlled.svg)
+![covenant](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/covenant/covenant-enabled.svg)
+![agent-pr-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/warn.svg)
+![provenance-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/provenance-policy/required.svg)
+![attestation-required](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/attestation-required/required.svg)
+![thread-intervention-policy](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/thread-intervention-policy/controlled.svg)
 ```
 
 ### Full SVG Catalog URLs
 
 `covenant`
 
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/covenant/covenant-enabled.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/covenant/covenant-enabled.svg`
 
 `agent-pr-policy`
 
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/allow.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/warn.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/deny.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/none.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/allow.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/warn.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/deny.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/none.svg`
 
 `provenance-policy`
 
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/provenance-policy/required.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/provenance-policy/configured.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/provenance-policy/none.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/provenance-policy/required.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/provenance-policy/configured.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/provenance-policy/none.svg`
 
 `attestation-required`
 
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/attestation-required/required.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/attestation-required/agents.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/attestation-required/none.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/attestation-required/required.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/attestation-required/agents.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/attestation-required/none.svg`
 
 `thread-intervention-policy`
 
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/thread-intervention-policy/controlled.svg`
-- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/thread-intervention-policy/open.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/thread-intervention-policy/controlled.svg`
+- `https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/thread-intervention-policy/open.svg`
 
 ### Main page catalog pattern (all variants stacked)
 

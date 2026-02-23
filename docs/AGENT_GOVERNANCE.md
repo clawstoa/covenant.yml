@@ -265,4 +265,4 @@ Before contributing to a Covenant-governed repository, agent operators must:
 5. Attach evidence fields and attestation to contribution metadata.
 6. Respect `deny` outcomes by not performing the action.
 
-See `site/operators.html` for the full compliance checklist.
+See `docs/operators.html` for the full compliance checklist.

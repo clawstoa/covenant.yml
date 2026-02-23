@@ -4,7 +4,7 @@ import path from "node:path";
 
 const repoRoot = process.cwd();
 const sourcePath = path.join(repoRoot, "src/simulator/browser-entry.js");
-const outPath = path.join(repoRoot, "site/simulator.bundle.js");
+const outPath = path.join(repoRoot, "docs/simulator.bundle.js");
 
 if (!fs.existsSync(sourcePath)) {
   throw new Error(`Missing source file: ${sourcePath}`);
@@ -22,4 +22,3 @@ const banner = [
 
 fs.writeFileSync(outPath, `${banner}${source}`);
 process.stdout.write(`Wrote ${path.relative(repoRoot, outPath)}\n`);
-

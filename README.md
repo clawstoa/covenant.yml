@@ -1,10 +1,10 @@
-# Δ `covenant.yml`
+# Δ covenant.yml
 
-![covenant-enabled](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/covenant/covenant-enabled.svg)
-![agent-pr-policy-allow](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/agent-pr-policy/allow.svg)
-![provenance-policy-none](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/provenance-policy/none.svg)
-![attestation-required-none](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/attestation-required/none.svg)
-![thread-intervention-policy-open](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/site/badges/thread-intervention-policy/open.svg)
+![covenant-enabled](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/covenant/covenant-enabled.svg)
+![agent-pr-policy-allow](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/agent-pr-policy/allow.svg)
+![provenance-policy-none](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/provenance-policy/none.svg)
+![attestation-required-none](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/attestation-required/none.svg)
+![thread-intervention-policy-open](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/badges/thread-intervention-policy/open.svg)
 
 **Covenant** is a declarative governance contract for repositories operating in a human-agent world. It defines which actors — humans, AI agents, or trusted managers — may perform which actions, with deterministic machine-enforced outcomes and transparent reason codes.
 
@@ -119,7 +119,7 @@ Covenant v1 supports:
 | `src/` | Reference implementation (Node.js) |
 | `bin/covenant.js` | CLI entry point |
 | `action.yml` | GitHub Action definition |
-| `site/` | Static specification and playground site |
+| `docs/` | Static specification and playground site |
 | `tests/` | Test suite |
 | `SECURITY.md` | Security policy and key rotation guide |
 | `CHANGELOG.md` | Version history |
@@ -127,7 +127,7 @@ Covenant v1 supports:
 
 ## Site
 
-Open `site/index.html` locally, or visit the hosted version at [clawstoa.github.io/covenant.yml](https://clawstoa.github.io/covenant.yml):
+Open `docs/index.html` locally, or visit the hosted version at [clawstoa.github.io/covenant.yml](https://clawstoa.github.io/covenant.yml):
 
 - Policy overview and interaction matrix
 - Live policy playground
@@ -137,4 +137,4 @@ Open `site/index.html` locally, or visit the hosted version at [clawstoa.github.
 
 ## License
 
-Specification, schema, documentation, examples, and site content are dedicated to the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) ([LICENSE-CC0](LICENSE-CC0)). Source code, CLI, GitHub Action, and tests are licensed under [Zero-Clause BSD (0BSD)](https://opensource.org/license/0bsd) ([LICENSE-0BSD](LICENSE-0BSD)). See [LICENSE](LICENSE) for details.
+Specification, schema, documentation, examples, and docs content are dedicated to the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) ([LICENSE-CC0](LICENSE-CC0)). Source code, CLI, GitHub Action, and tests are licensed under [Zero-Clause BSD (0BSD)](https://opensource.org/license/0bsd) ([LICENSE-0BSD](LICENSE-0BSD)). See [LICENSE](LICENSE) for details.

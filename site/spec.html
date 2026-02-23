@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Specification | Covenant v1</title>
+  <meta name="description" content="Covenant v1 normative specification. Deterministic governance contract for repositories.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="spec-page">
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html">Overview</a>
+    <a href="./catalog.html">Catalog</a>
+    <a href="./operators.html">Operators</a>
+    <a href="./contribute.html">Contribute</a>
+    <a href="./spec.html" class="active">Spec</a>
+    <a href="./simulator.html">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Specification</p>
+    <h1>Covenant v1</h1>
+    <p class="lead">
+      Version: <code>1.0.0</code> &mdash; Status: Release
+    </p>
+  </header>
+
+  <aside class="spec-toc" aria-label="Table of contents">
+    <p class="spec-toc-label">On This Page</p>
+    <a href="#sec-1-purpose">1. Purpose</a>
+    <a href="#sec-2-location">2. Canonical Location</a>
+    <a href="#sec-3-decision">3. Decision Model</a>
+    <a href="#sec-4-contract">4. Top-Level Contract</a>
+    <a href="#sec-5-resolution">5. Deterministic Resolution Algorithm</a>
+    <a href="#sec-6-matrix">6. Interaction Matrix</a>
+    <a href="#sec-7-attestation">7. Attestation Contract</a>
+    <a href="#sec-8-enforcement">8. Enforcement Operations</a>
+    <a href="#sec-9-actions">9. Canonical Actions</a>
+    <a href="#sec-10-flow">10. Resolution Flow</a>
+    <a href="#sec-11-interfaces">11. Public Interfaces</a>
+    <a href="#sec-12-conformance">12. Conformance</a>
+    <a href="#sec-13-reason-codes">13. Reason Codes</a>
+    <a href="#sec-14-glossary">14. Glossary</a>
+  </aside>
+
+  <main>
+    <section id="sec-1-purpose" class="panel">
+      <h2>1. Purpose</h2>
+      <p><code>covenant.yml</code> is a deterministic governance contract for repositories. It defines what human contributors, software agents, and manager actors may do across repository interaction surfaces.</p>
+      <p>The policy is machine-readable and schema-validated. No enforcement decision depends on natural language interpretation.</p>
+      <p>
+        Read this page as an implementation guide: sections 2-5 define the contract and evaluation pipeline, sections 6-11 define behavior and interfaces, and sections 12-14 define compliance and shared terminology.
+      </p>
+    </section>
+
+    <section id="sec-2-location" class="panel">
+      <h2>2. Canonical Location</h2>
+      <p>The policy file must be placed at the repository root:</p>
+      <pre><code>/covenant.yml</code></pre>
+      <p>No alias locations are part of Covenant v1.</p>
+    </section>
+
+    <section id="sec-3-decision" class="panel">
+      <h2>3. Decision Model</h2>
+      <p>Covenant uses three outcomes:</p>
+      <ul>
+        <li><code>allow</code>: action is accepted</li>
+        <li><code>warn</code>: action is accepted but flagged</li>
+        <li><code>deny</code>: action is rejected</li>
+      </ul>
+      <p>Strictness ordering: <code>deny</code> &gt; <code>warn</code> &gt; <code>allow</code></p>
+      <p>
+        In practice, this means any failing requirement can only keep or increase strictness. A decision never becomes less strict later in evaluation.
+      </p>
+    </section>
+
+    <section id="sec-4-contract" class="panel">
+      <h2>4. Top-Level Contract</h2>
+      <p>
+        Think of top-level keys as contract modules: each one controls a different stage of evaluation, verification, or enforcement.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Key</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>spec_version</code></td><td>Pins behavior to a known spec contract.</td></tr>
+            <tr><td><code>defaults</code></td><td>Fallback decision behavior when no rule matches.</td></tr>
+            <tr><td><code>actors</code></td><td>Identity mapping for human, agent, and manager actor profiles.</td></tr>
+            <tr><td><code>surfaces</code></td><td>Optional surface-level configuration and constraints.</td></tr>
+            <tr><td><code>rules</code></td><td>Primary policy logic (actor + action + constraints -&gt; outcome).</td></tr>
+            <tr><td><code>requirements</code></td><td>Evidence and provenance requirements applied after rule selection.</td></tr>
+            <tr><td><code>attestation</code></td><td>Cryptographic verification controls and failure handling.</td></tr>
+            <tr><td><code>enforcement</code></td><td>Action plan templates for <code>allow</code>/<code>warn</code>/<code>deny</code> decisions.</td></tr>
+            <tr><td><code>routing</code></td><td>Branch reroute behavior for selected denied operations.</td></tr>
+            <tr><td><code>policies</code></td><td>Pre-rule global gates (for example eligible-label checks).</td></tr>
+            <tr><td><code>metadata</code></td><td>Informational fields that do not change the decision model.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Unknown top-level keys are invalid.</p>
+      <h3>4.1 Policies</h3>
+      <p>
+        The <code>policies</code> section defines cross-cutting constraints that are evaluated before rule matching.
+      </p>
+      <p><strong><code>agent_eligible_labels</code></strong> restricts agents to issues carrying at least one eligible label.</p>
+      <pre><code>policies:
+  agent_eligible_labels:
+    labels: [agent-friendly, good-first-bot-issue]
+    actions: [issue.solve, issue.comment]
+    on_missing: deny</code></pre>
+      <ul>
+        <li><code>labels</code>: at least one of these labels must be present on the issue.</li>
+        <li><code>actions</code>: optional list limiting which canonical issue actions the gate applies to.</li>
+        <li><code>on_missing</code>: decision used when labels are missing (<code>allow</code>, <code>warn</code>, or <code>deny</code>).</li>
+      </ul>
+      <p>
+        This gate only affects agents. Humans and managers are not subject to it.
+      </p>
+    </section>
+
+    <section id="sec-5-resolution" class="panel">
+      <h2>5. Deterministic Resolution Algorithm</h2>
+      <p>Input event envelope:</p>
+      <pre><code>{
+  "action": "pull_request.open",
+  "actor": { "id": "ci-agent[bot]", "kind": "agent" },
+  "repository": { "name": "acme/project", "visibility": "public" },
+  "target": { "branch": "main", "thread_mode": "mixed", "labels": ["ai"] },
+  "evidence": {
+    "model": "gpt-5",
+    "provider": "openai",
+    "prompt_record": "prompt://123",
+    "test_proof": "tests://ci/123"
+  },
+  "attestation": {}
+}</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Envelope Field</th><th>How to interpret it</th></tr></thead>
+          <tbody>
+            <tr><td><code>action</code></td><td>Canonical operation being evaluated (for example <code>pull_request.open</code>).</td></tr>
+            <tr><td><code>actor</code></td><td>Who initiated the event; used for actor-kind resolution and profile matching.</td></tr>
+            <tr><td><code>repository</code></td><td>Repository context used by rules or conditions (name, visibility, and related metadata).</td></tr>
+            <tr><td><code>target</code></td><td>Action target context such as branch, labels, and thread mode.</td></tr>
+            <tr><td><code>evidence</code></td><td>Provenance fields evaluated by requirement profiles.</td></tr>
+            <tr><td><code>attestation</code></td><td>Signed proof block, required only where policy demands it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Resolution steps:</p>
+      <ol>
+        <li>Normalize incoming platform event into canonical <code>action</code> and envelope.</li>
+        <li>Apply policies gates (for example <code>agent_eligible_labels</code>) before rule matching.</li>
+        <li>Match candidate rules by actor, action, target, and conditions.</li>
+        <li>Compute specificity tuple: actor specificity, action specificity, target specificity, condition count.</li>
+        <li>Select highest tuple.</li>
+        <li>If tie: apply strictness tie-break (<code>deny</code> &gt; <code>warn</code> &gt; <code>allow</code>).</li>
+        <li>If no rule matches: use <code>defaults.unmatched</code>.</li>
+        <li>Apply <code>requirements</code> checks.</li>
+        <li>Apply attestation checks when required.</li>
+        <li>Compute final decision as the maximum strictness of rule outcome and requirement/attestation failures.</li>
+        <li>Compute reason codes and emit enforcement action plan.</li>
+      </ol>
+      <p>
+        Think of the algorithm as a fixed pipeline: normalize -&gt; gate -&gt; match -&gt; escalate -&gt; enforce. Because the order is fixed, identical inputs always produce identical outputs.
+      </p>
+    </section>
+
+    <section id="sec-6-matrix" class="panel">
+      <h2>6. Interaction Matrix</h2>
+      <p>
+        The matrix below maps each canonical action to expected decision ranges per actor kind. Hover selected headers and action names for field-level guidance.
+      </p>
+      <p>
+        This is a capability map, not a direct allow-list. The final decision for a given event still depends on your concrete rules, policies gates, and requirement failures.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span title="Canonical action name evaluated by policy rules after event normalization.">Interaction</span></th>
+              <th><span title="Possible default outcomes for human actors after rule matching and requirements checks.">Human</span></th>
+              <th><span title="Possible default outcomes for agent actors after rule matching and requirements checks.">Agent</span></th>
+              <th><span title="Managers are often granted wide permissions for governance automation.">Manager</span></th>
+              <th><span title="Common controls used to enforce policy for this interaction (labels, provenance, attestation, thread mode, routing).">Typical Controls</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code title="Open a new issue.">issue.open</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>templates, labels, attestation</td></tr>
+            <tr><td><code title="Comment on an issue.">issue.comment</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>thread mode control</td></tr>
+            <tr><td><code title="Add or modify issue labels.">issue.label</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>auto-label policy</td></tr>
+            <tr><td><code title="Close or resolve an issue.">issue.solve</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>evidence policy</td></tr>
+            <tr><td><code title="Open a pull request.">pull_request.open</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>provenance and tests</td></tr>
+            <tr><td><code title="Update commits or metadata on an existing pull request.">pull_request.update</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>re-attestation</td></tr>
+            <tr><td><code title="Submit a pull request review.">pull_request.review.submit</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>reviewer policy</td></tr>
+            <tr><td><code title="Approve a pull request review state.">pull_request.review.approve</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>human-only gates</td></tr>
+            <tr><td><code title="Merge a pull request.">pull_request.merge</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>branch and ruleset checks</td></tr>
+            <tr><td><code title="Agent intervention in a human-labeled thread.">conversation.intervene_human_thread</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>human thread protection</td></tr>
+            <tr><td><code title="Intervention in an agent-labeled thread.">conversation.intervene_agent_thread</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>agent thread policy</td></tr>
+            <tr><td><code title="Maintenance operations such as close/relabel/delete branch.">maintenance.cleanup</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>close PR, delete branch</td></tr>
+            <tr><td><code title="Canonical routing action name in Covenant v1.">routing.to_develop_bot</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>reroute to develop-bot branch</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Thread modes are explicit: <code>human</code>, <code>agent</code>, <code>mixed</code>.</p>
+    </section>
+
+    <section id="sec-7-attestation" class="panel">
+      <h2>7. Attestation Contract</h2>
+      <p>Attestation version: <code>covenant.attestation.v1</code></p>
+      <p>
+        The signed payload binds identity, action, repository context, policy revision, and freshness controls into one verifiable artifact.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Expected meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>version</code></td><td>Contract version of the attestation payload.</td></tr>
+            <tr><td><code>actor_id</code></td><td>Exact actor identity that created the action.</td></tr>
+            <tr><td><code>action</code></td><td>Canonical action being attested.</td></tr>
+            <tr><td><code>repository</code></td><td>Repository identifier this attestation applies to.</td></tr>
+            <tr><td><code>ref</code></td><td>Git reference tied to the action context.</td></tr>
+            <tr><td><code>policy_sha256</code></td><td>Hash binding the signature to a specific policy revision.</td></tr>
+            <tr><td><code>timestamp</code></td><td>Creation time used for freshness checks.</td></tr>
+            <tr><td><code>nonce</code></td><td>Single-use token used for replay protection.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Verification key registry: <code>actors.agents[].verification</code></p>
+      <p>Minimum controls:</p>
+      <ul>
+        <li>Signature verification</li>
+        <li>Timestamp freshness (<code>attestation.max_age_seconds</code>)</li>
+        <li>Replay protection (<code>attestation.nonce_ttl_seconds</code>)</li>
+        <li>Policy hash equality</li>
+      </ul>
+      <p>
+        A valid signature is necessary but not sufficient: freshness, nonce reuse, and policy-hash checks must all pass.
+      </p>
+    </section>
+
+    <section id="sec-8-enforcement" class="panel">
+      <h2>8. Enforcement Operations</h2>
+      <p>
+        Enforcement operations are deterministic side effects. They explain, route, or block actions based on the final decision.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operation</th><th>Typical use</th></tr></thead>
+          <tbody>
+            <tr><td><code>comment</code></td><td>Communicate why a decision was produced.</td></tr>
+            <tr><td><code>label</code></td><td>Mark issues/PRs for workflow routing or review queues.</td></tr>
+            <tr><td><code>close_pull_request</code></td><td>Stop disallowed changes from remaining open.</td></tr>
+            <tr><td><code>delete_branch</code></td><td>Clean up denied or obsolete contribution branches.</td></tr>
+            <tr><td><code>reroute_to_branch</code></td><td>Retarget blocked PRs to a staging branch.</td></tr>
+            <tr><td><code>fail_status</code></td><td>Surface policy failures in CI checks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Actions are planned deterministically from <code>enforcement.&lt;decision&gt;</code> and optional routing rules.</p>
+    </section>
+
+    <section id="sec-9-actions" class="panel">
+      <h2>9. Canonical Actions</h2>
+      <p>
+        Canonical actions are normalized event names used by rules. Platform-specific event payloads should map to one of these before evaluation.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Action</th><th>When it is used</th></tr></thead>
+          <tbody>
+            <tr><td><code>issue.open</code></td><td>Create a new issue.</td></tr>
+            <tr><td><code>issue.comment</code></td><td>Add a comment to an issue.</td></tr>
+            <tr><td><code>issue.label</code></td><td>Add or change issue labels.</td></tr>
+            <tr><td><code>issue.solve</code></td><td>Close or resolve an issue.</td></tr>
+            <tr><td><code>pull_request.open</code></td><td>Create a new pull request.</td></tr>
+            <tr><td><code>pull_request.update</code></td><td>Push updates to an existing pull request.</td></tr>
+            <tr><td><code>pull_request.review.submit</code></td><td>Submit a review on a pull request.</td></tr>
+            <tr><td><code>pull_request.review.approve</code></td><td>Set review state to approved.</td></tr>
+            <tr><td><code>pull_request.merge</code></td><td>Merge an approved pull request.</td></tr>
+            <tr><td><code>conversation.intervene_human_thread</code></td><td>Comment in a thread labeled as human-focused.</td></tr>
+            <tr><td><code>conversation.intervene_agent_thread</code></td><td>Comment in a thread labeled as agent-focused.</td></tr>
+            <tr><td><code>maintenance.cleanup</code></td><td>Perform maintenance actions like close/relabel/delete branch.</td></tr>
+            <tr><td><code>routing.to_develop_bot</code></td><td>Retarget denied pull requests to a configured staging branch.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Wildcards supported in rules: <code>*</code> and <code>&lt;surface&gt;.*</code> (e.g., <code>pull_request.*</code>)</p>
+      <p>
+        Use exact actions when you need strict control, and surface wildcards when you want broader but still explicit policy coverage.
+      </p>
+    </section>
+
+    <section id="sec-10-flow" class="panel">
+      <h2>10. Resolution Flow</h2>
+      <pre><code>Incoming platform event
+  -> Normalize to canonical action
+  -> Apply policies gates
+  -> Match candidate rules
+  -> Compute specificity tuple
+  -> Select rule or defaults.unmatched
+  -> Apply provenance requirements
+  -> Apply attestation checks
+  -> Finalize decision and reason codes
+  -> Plan enforcement operations
+  -> Emit CI outputs and badges</code></pre>
+      <p>
+        This condensed flow mirrors the algorithm in section 5 and is useful as a debugging checklist when a decision looks unexpected.
+      </p>
+    </section>
+
+    <section id="sec-11-interfaces" class="panel">
+      <h2>11. Public Interfaces</h2>
+      <p>
+        These interfaces are the stable integration points for local tooling, CI workflows, and policy-aware automation.
+      </p>
+      <h3>CLI</h3>
+      <pre><code>covenant validate [policy-path]
+covenant eval --event &lt;json|path&gt; [--policy &lt;path&gt;]
+covenant badge --format json|shields [--policy &lt;path&gt;]</code></pre>
+      <h3>GitHub Action</h3>
+      <p>Inputs: <code>policy-path</code>, <code>event-json</code>, <code>mode</code></p>
+      <p>Outputs: <code>decision</code>, <code>reason_codes</code>, <code>enforcement_actions</code></p>
+      <h3>Schema</h3>
+      <p><a href="https://raw.githubusercontent.com/clawstoa/covenant.yml/main/schema/covenant.schema.json"><code>schema/covenant.schema.json</code></a></p>
+      <p>
+        Integrators should treat CLI output and action outputs as machine contracts, and use the schema for validation before policy evaluation.
+      </p>
+    </section>
+
+    <section id="sec-12-conformance" class="panel">
+      <h2>12. Conformance</h2>
+      <p>A Covenant v1 implementation is conformant if:</p>
+      <ul>
+        <li>Identical event + identical policy always produce identical output.</li>
+        <li>Unsupported keys are rejected.</li>
+        <li>No decision depends on free-text interpretation.</li>
+        <li>Decision and reason codes are emitted in machine-readable form.</li>
+      </ul>
+      <p>
+        Conformance is about behavior, not language. If two engines disagree on a decision for the same input, at least one is non-conformant.
+      </p>
+    </section>
+
+    <section id="sec-13-reason-codes" class="panel">
+      <h2>13. Reason Codes</h2>
+      <p>Conformant engines emit machine-readable reason codes with each decision.</p>
+      <p>
+        Treat reason codes as your debugging API: they explain exactly which gate, rule, or verification check influenced the final outcome.
+      </p>
+      <h3>Rule Selection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>rule.selected.&lt;id&gt;</code></td><td>Rule with the given ID was selected as the best match.</td></tr>
+            <tr><td><code>defaults.unmatched</code></td><td>No rule matched; <code>defaults.unmatched</code> was applied.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Policies Gate</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>policies.agent_eligible_labels.missing</code></td><td>Agent issue action had no eligible label.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Provenance / Evidence</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>requirements.provenance_profile_missing</code></td><td>Referenced provenance profile is not defined.</td></tr>
+            <tr><td><code>requirements.provenance.missing.&lt;field&gt;</code></td><td>Required evidence field is absent or empty.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Attestation</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>attestation.missing</code></td><td>No <code>attestation</code> block was provided.</td></tr>
+            <tr><td><code>attestation.invalid_version</code></td><td>Attestation version is not <code>covenant.attestation.v1</code>.</td></tr>
+            <tr><td><code>attestation.actor_mismatch</code></td><td><code>attestation.actor_id</code> does not match <code>event.actor.id</code>.</td></tr>
+            <tr><td><code>attestation.action_mismatch</code></td><td><code>attestation.action</code> does not match <code>event.action</code>.</td></tr>
+            <tr><td><code>attestation.policy_hash_mismatch</code></td><td><code>attestation.policy_sha256</code> does not match evaluated policy.</td></tr>
+            <tr><td><code>attestation.invalid_timestamp</code></td><td><code>attestation.timestamp</code> is not parseable.</td></tr>
+            <tr><td><code>attestation.expired</code></td><td>Attestation is older than <code>attestation.max_age_seconds</code>.</td></tr>
+            <tr><td><code>attestation.invalid_nonce</code></td><td><code>attestation.nonce</code> is missing or invalid.</td></tr>
+            <tr><td><code>attestation.replayed_nonce</code></td><td>Nonce was already seen within <code>nonce_ttl_seconds</code>.</td></tr>
+            <tr><td><code>attestation.verification_key_missing</code></td><td>No verification key is registered for the actor profile.</td></tr>
+            <tr><td><code>attestation.unsupported_verification_type</code></td><td>Verification type is not supported.</td></tr>
+            <tr><td><code>attestation.invalid_signature_encoding</code></td><td>Public key or signature is not valid base64.</td></tr>
+            <tr><td><code>attestation.invalid_signature</code></td><td>Signature verification failed.</td></tr>
+            <tr><td><code>attestation.signature_verification_error</code></td><td>Internal error occurred during signature verification.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sec-14-glossary" class="panel">
+      <h2>14. Glossary</h2>
+      <p>
+        Use this glossary as the canonical meaning of terms used across policy files, CLI output, and documentation.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><strong>actor</strong></td><td>Entity performing an action: <code>human</code>, <code>agent</code>, or <code>manager</code>.</td></tr>
+            <tr><td><strong>agent</strong></td><td>Software system acting autonomously on a repository.</td></tr>
+            <tr><td><strong>action</strong></td><td>Canonical interaction event, e.g. <code>pull_request.open</code>.</td></tr>
+            <tr><td><strong>attestation</strong></td><td>Signed payload asserting context for an agent action.</td></tr>
+            <tr><td><strong>decision</strong></td><td>Policy evaluation outcome: <code>allow</code>, <code>warn</code>, or <code>deny</code>.</td></tr>
+            <tr><td><strong>evidence</strong></td><td>Provenance fields in <code>event.evidence</code> (model, provider, prompt_record, test_proof).</td></tr>
+            <tr><td><strong>manager</strong></td><td>Trusted actor kind declared in policy for governance automation.</td></tr>
+            <tr><td><strong>outcome</strong></td><td>Rule-declared value (<code>allow</code>, <code>warn</code>, <code>deny</code>) before requirement escalation.</td></tr>
+            <tr><td><strong>policy</strong></td><td>Full contents of a <code>covenant.yml</code> file.</td></tr>
+            <tr><td><strong>profile</strong></td><td>Named actor entry under <code>actors.agents[]</code>, <code>actors.humans[]</code>, or <code>actors.managers[]</code>.</td></tr>
+            <tr><td><strong>provenance</strong></td><td>Origin/context metadata for an agent action.</td></tr>
+            <tr><td><strong>rule</strong></td><td>Policy entry mapping actor + action (+ optional target/conditions) to an outcome.</td></tr>
+            <tr><td><strong>surface</strong></td><td>Namespace grouping related actions, such as <code>issue</code> or <code>pull_request</code>.</td></tr>
+            <tr><td><strong>thread mode</strong></td><td>Conversation type: <code>human</code>, <code>agent</code>, or <code>mixed</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+  <script src="./highlight.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var toc = document.querySelector(".spec-toc");
+    if (!toc) return;
+
+    var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+    var sections = links
+      .map(function (link) { return document.querySelector(link.getAttribute("href")); })
+      .filter(Boolean);
+    var firstSection = sections.length ? sections[0] : null;
+
+    function updateToc() {
+      var scrollY = window.scrollY || window.pageYOffset || 0;
+      var threshold = firstSection ? Math.max(120, firstSection.offsetTop - 40) : 120;
+      document.body.classList.toggle("show-spec-toc", scrollY > threshold);
+
+      if (!sections.length) return;
+      var active = sections[0];
+      var marker = scrollY + 160;
+      for (var i = 0; i < sections.length; i += 1) {
+        if (sections[i].offsetTop <= marker) active = sections[i];
+      }
+
+      links.forEach(function (link) {
+        var isActive = link.getAttribute("href") === ("#" + active.id);
+        link.classList.toggle("active", isActive);
+      });
+    }
+
+    window.addEventListener("scroll", updateToc, { passive: true });
+    window.addEventListener("resize", updateToc);
+    updateToc();
+  })();
+  </script>
+</body>
+</html>

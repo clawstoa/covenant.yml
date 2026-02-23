@@ -11,7 +11,7 @@ The simulator is implemented as a separate subsystem under:
 It is consumed by:
 
 - CLI: `node bin/covenant.js simulate`
-- Static UI: `site/simulator.html` + `site/simulator.js`
+- Static UI: `docs/simulator.html` + `docs/simulator.js`
 
 ## Goals
 
@@ -75,7 +75,7 @@ pnpm build:simulator
 
 Open static UI:
 
-- `site/simulator.html`
+- `docs/simulator.html`
 
 ## UI Developer Notes
 
@@ -102,7 +102,7 @@ To add a new simulator type:
 2. Add default mapping in `src/simulator/mapping.js` / catalog defaults.
 3. Ensure generator labels/contexts reflect realistic event metadata.
 4. Add tests in `tests/simulator/simulator.test.js`.
-5. Update UI type selector in `site/simulator.html`.
+5. Update UI type selector in `docs/simulator.html`.
 6. Update docs:
    - `docs/SCENARIOS.md`
    - `docs/SIMULATOR.md`

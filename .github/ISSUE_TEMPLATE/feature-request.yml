@@ -16,7 +16,7 @@ body:
         - Schema (covenant.schema.json)
         - CLI (bin/covenant.js)
         - GitHub Action (action.yml)
-        - Static site (site/)
+        - Static site (docs/)
         - Documentation (docs/)
         - Examples (examples/)
     validations:
