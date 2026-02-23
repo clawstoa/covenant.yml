@@ -1,0 +1,22 @@
+# Gentoo-style policy: rejecting all AI-generated contributions
+# Human authorship required for all interactions.
+spec_version: 1.0.0
+defaults:
+  unmatched: deny
+enforcement:
+  deny:
+    - type: comment
+      message: This repository does not accept AI-generated contributions. action=${action} by ${actor}. reason=${reason_codes}
+    - type: fail_status
+      context: covenant/policy
+      description: AI contributions are not accepted
+    - type: close_pull_request
+rules:
+  - id: human-all
+    actor: human
+    action: '*'
+    outcome: allow
+  - id: deny-agent-all
+    actor: agent
+    action: '*'
+    outcome: deny

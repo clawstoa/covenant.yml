@@ -1,0 +1,55 @@
+# covenant.yml
+
+> Covenant v1 is a deterministic governance standard for human and AI-agent contributions in repositories, with machine-verifiable policy outcomes.
+
+This file provides a curated map of the Covenant project for LLM and agent use. The primary website is hosted at `https://clawstoa.github.io/covenant.yml/`, and canonical source files are in the GitHub repository.
+
+## Core Site Pages
+
+- [Overview](https://clawstoa.github.io/covenant.yml/index.html): Project overview, interaction matrix, playground, and badge catalog.
+- [Specification (site)](https://clawstoa.github.io/covenant.yml/spec.html): Browser-friendly Covenant v1 specification.
+- [Policy Catalog](https://clawstoa.github.io/covenant.yml/catalog.html): Real-world AI contribution policy mappings.
+- [Operators](https://clawstoa.github.io/covenant.yml/operators.html): Agent operator checklist and policy compliance guidance.
+- [Simulator](https://clawstoa.github.io/covenant.yml/simulator.html): Deterministic simulation UI for policy behavior.
+- [Contribute](https://clawstoa.github.io/covenant.yml/contribute.html): How to submit catalog policy dissections.
+
+## Canonical Specification
+
+- [SPEC.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/SPEC.md): Normative Covenant v1 specification.
+- [schema/covenant.schema.json](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/schema/covenant.schema.json): JSON Schema for validation.
+- [action.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/action.yml): GitHub Action interface.
+- [covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/covenant.yml): This repository's policy configuration.
+
+## Documentation
+
+- [README.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/README.md): Project introduction and usage.
+- [docs/ADOPTION.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/ADOPTION.md): Maintainer adoption guide.
+- [docs/AGENT_GOVERNANCE.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/AGENT_GOVERNANCE.md): Agent governance model and requirements.
+- [docs/GITHUB_ADAPTER.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/GITHUB_ADAPTER.md): Event normalization reference.
+- [docs/BADGES.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/BADGES.md): Badge contract and integration.
+- [docs/POLICY_CATALOG.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/POLICY_CATALOG.md): Catalog of real-world policy mappings.
+- [docs/SIMULATOR.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/SIMULATOR.md): Simulator behavior and usage.
+- [docs/SCENARIOS.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/docs/SCENARIOS.md): Scenario reference catalog.
+
+## Example Policies
+
+- [examples/minimal.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/minimal.covenant.yml): Minimal guided policy.
+- [examples/open.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/open.covenant.yml): Accepting/open policy posture.
+- [examples/strict.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/strict.covenant.yml): Strict policy with stronger controls.
+- [examples/polars.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/polars.covenant.yml): Polars-style mapping.
+- [examples/netbsd.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/netbsd.covenant.yml): Restricting/approval-based mapping.
+- [examples/gentoo.covenant.yml](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/examples/gentoo.covenant.yml): Rejecting/no-agent mapping.
+
+## Implementation
+
+- [Repository Root](https://github.com/clawstoa/covenant.yml): Source repository.
+- [CLI Entry Point](https://github.com/clawstoa/covenant.yml/blob/main/bin/covenant.js): Command-line interface.
+- [src/](https://github.com/clawstoa/covenant.yml/tree/main/src): Evaluator and adapter reference implementation.
+- [tests/](https://github.com/clawstoa/covenant.yml/tree/main/tests): Validation and behavior test suite.
+
+## Optional
+
+- [SECURITY.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/SECURITY.md): Security reporting and attestation notes.
+- [CHANGELOG.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/CHANGELOG.md): Release history.
+- [CONTRIBUTING.md](https://raw.githubusercontent.com/clawstoa/covenant.yml/main/CONTRIBUTING.md): Contribution process.
+- [v2 discussion](https://github.com/clawstoa/covenant.yml/issues/1): Ongoing Covenant v2 scope discussion.

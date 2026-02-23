@@ -1,0 +1,12 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+rules:
+  - id: allow-human-issues
+    actor: human
+    action: issue.open
+    outcome: allow
+  - id: warn-agent-pr-open
+    actor: agent
+    action: pull_request.open
+    outcome: warn

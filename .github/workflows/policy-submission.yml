@@ -1,0 +1,119 @@
+name: Policy Submission Validator
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  validate-policy:
+    if: contains(github.event.issue.labels.*.name, 'policy-submission')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Extract YAML from issue body
+        id: extract
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const yamlMatch = body.match(/```yaml\n([\s\S]*?)```/);
+            if (!yamlMatch) {
+              core.setOutput('found', 'false');
+              return;
+            }
+            const fs = require('fs');
+            fs.writeFileSync('/tmp/submitted-policy.yml', yamlMatch[1]);
+            core.setOutput('found', 'true');
+
+      - name: Validate submitted policy
+        if: steps.extract.outputs.found == 'true'
+        id: validate
+        run: |
+          set +e
+          OUTPUT=$(node bin/covenant.js validate /tmp/submitted-policy.yml 2>&1)
+          EXIT_CODE=$?
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "output<<$EOF" >> "$GITHUB_OUTPUT"
+          echo "$OUTPUT" >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Generate badge preview
+        if: steps.extract.outputs.found == 'true' && steps.validate.outputs.exit_code == '0'
+        id: badges
+        run: |
+          BADGES=$(node bin/covenant.js badge --policy /tmp/submitted-policy.yml --format json 2>&1)
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "output<<$EOF" >> "$GITHUB_OUTPUT"
+          echo "$BADGES" >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on valid submission
+        if: steps.extract.outputs.found == 'true' && steps.validate.outputs.exit_code == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const badges = JSON.parse(`${{ steps.badges.outputs.output }}`);
+            const badgeLines = Object.entries(badges)
+              .map(([name, b]) => `- **${b.label}**: ${b.message}`)
+              .join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `**Covenant policy validation passed.**\n\nBadge preview:\n${badgeLines}\n\nA maintainer will review and merge this policy into the catalog.`
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['validated']
+            });
+
+      - name: Comment on invalid submission
+        if: steps.extract.outputs.found == 'true' && steps.validate.outputs.exit_code != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `${{ steps.validate.outputs.output }}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `**Covenant policy validation failed.**\n\nPlease fix the following errors and update the YAML block in your issue:\n\n\`\`\`\n${output}\n\`\`\``
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['needs-fix']
+            });
+
+      - name: Comment when no YAML found
+        if: steps.extract.outputs.found == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'No YAML code block found in the issue body. Please include a `covenant.yml` mapping in a fenced YAML code block.'
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['needs-fix']
+            });

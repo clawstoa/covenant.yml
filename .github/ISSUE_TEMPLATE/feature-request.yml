@@ -1,0 +1,39 @@
+name: Feature Request
+description: Propose a change or addition to the Covenant v1 standard.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose a change to the Covenant v1 specification, schema, tooling, or documentation.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Specification (SPEC.md)
+        - Schema (covenant.schema.json)
+        - CLI (bin/covenant.js)
+        - GitHub Action (action.yml)
+        - Static site (site/)
+        - Documentation (docs/)
+        - Examples (examples/)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the proposed change and its rationale.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you considered and why this one is preferred.
+    validations:
+      required: false

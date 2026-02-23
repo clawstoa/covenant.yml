@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contribute a Policy | Covenant v1</title>
+  <meta name="description" content="How to submit a dissected AI contribution policy to the Covenant catalog.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html">Overview</a>
+    <a href="./catalog.html">Catalog</a>
+    <a href="./operators.html">Operators</a>
+    <a href="./contribute.html" class="active">Contribute</a>
+    <a href="./spec.html">Spec</a>
+    <a href="./simulator.html">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Contribute</p>
+    <h1>Add a policy to the catalog</h1>
+    <p class="lead">
+      Know a project with a defined AI contribution stance? Submit it for inclusion. Policies are validated against the Covenant.yml v1.0.0 schema before acceptance.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Submission Flow</h2>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div>
+            <h3>Open an Issue</h3>
+            <p>Use the <a href="https://github.com/clawstoa/covenant.yml/issues/new?template=policy-submission.yml">Policy Submission</a> template. Fill in the project name, URL, stance, and a proposed <code>covenant.yml</code> mapping.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div>
+            <h3>Automated Validation</h3>
+            <p>A CI workflow extracts the YAML from your issue and validates it against the Covenant.yml v1.0.0 schema. If valid, the issue is labeled <code>validated</code>. If invalid, you receive specific error feedback.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div>
+            <h3>Maintainer Review</h3>
+            <p>A maintainer reviews the policy mapping for accuracy and completeness. The mapping must faithfully represent the project's actual AI contribution stance.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div>
+            <h3>Catalog Merge</h3>
+            <p>The approved policy is merged into <code>docs/POLICY_CATALOG.md</code> and appears on the <a href="./catalog.html">catalog page</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>What to Include</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Project name</td><td>Yes</td><td>The name of the open-source project.</td></tr>
+            <tr><td>Project URL</td><td>Yes</td><td>Link to the project repository.</td></tr>
+            <tr><td>Stance</td><td>Yes</td><td>One of: accepting, restricting, rejecting.</td></tr>
+            <tr><td>Policy source URL</td><td>Yes</td><td>Direct link to the project's AI contribution policy or discussion.</td></tr>
+            <tr><td>Summary</td><td>Yes</td><td>One to three sentences describing the policy.</td></tr>
+            <tr><td>covenant.yml mapping</td><td>Yes</td><td>A valid Covenant v1 YAML policy that programmatically represents the stance.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Example Submission</h2>
+      <pre><code>Project: NumPy
+URL: https://github.com/numpy/numpy
+Stance: accepting
+Policy source: https://numpy.org/doc/stable/dev/index.html
+Summary: AI-assisted contributions accepted with disclosure. Standard review applies.
+
+covenant.yml mapping:
+
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+requirements:
+  on_failure: warn
+  default_provenance_profile: disclosure
+  provenance_profiles:
+    disclosure:
+      required_fields: [model, provider]
+      on_failure: warn
+rules:
+  - id: agent-pr-with-disclosure
+    actor: agent
+    action: pull_request.open
+    requirements:
+      provenance_profile: disclosure
+    outcome: warn
+  - id: human-pr
+    actor: human
+    action: pull_request.open
+    outcome: allow
+  - id: protect-human-threads
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: deny</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>Updating an Existing Policy</h2>
+      <p>
+        If a project in the catalog has changed its AI contribution policy, use the
+        <a href="https://github.com/clawstoa/covenant.yml/issues/new?template=policy-update.yml">Policy Update</a> template.
+        Include the project name, the updated policy source, and the revised <code>covenant.yml</code> mapping.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Contributing Code</h2>
+      <p>
+        For contributions to the Covenant standard itself (specification, schema, tooling, site), see
+        <a href="https://github.com/clawstoa/covenant.yml/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
+        This repository governs itself with its own <code>covenant.yml</code>.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+  <script src="./highlight.js"></script>
+</body>
+</html>

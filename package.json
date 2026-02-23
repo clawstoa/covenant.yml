@@ -1,0 +1,21 @@
+{
+  "name": "@stoa/covenant",
+  "version": "1.0.0",
+  "description": "Deterministic repository governance for human and agent contributions.",
+  "license": "CC0-1.0 AND 0BSD",
+  "type": "commonjs",
+  "bin": {
+    "covenant": "bin/covenant.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node bin/covenant.js validate",
+    "eval": "node bin/covenant.js eval",
+    "badge": "node bin/covenant.js badge",
+    "simulate": "node bin/covenant.js simulate",
+    "build:simulator": "node scripts/build-site-simulator.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

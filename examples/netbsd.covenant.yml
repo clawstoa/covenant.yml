@@ -1,0 +1,54 @@
+# NetBSD-style policy: restricting, core team approval required
+# AI contributions denied by default. Manager actors override for approved workflows.
+spec_version: 1.0.0
+defaults:
+  unmatched: deny
+actors:
+  managers:
+    - id: core-team
+      match:
+        usernames: [netbsd-core]
+requirements:
+  on_failure: deny
+  default_provenance_profile: strict
+  provenance_profiles:
+    strict:
+      required_fields: [model, provider, prompt_record, test_proof]
+      on_failure: deny
+attestation:
+  contract: covenant.attestation.v1
+  max_age_seconds: 900
+  nonce_ttl_seconds: 3600
+  on_failure: deny
+enforcement:
+  deny:
+    - type: comment
+      message: Covenant denied for ${actor} on ${action}. Core team approval required. reason=${reason_codes}
+    - type: fail_status
+      context: covenant/policy
+      description: AI contribution requires core team pre-approval
+rules:
+  - id: manager-override
+    actor: manager
+    action: '*'
+    outcome: allow
+  - id: human-pr
+    actor: human
+    action: pull_request.open
+    outcome: allow
+  - id: human-issues
+    actor: human
+    action: issue.*
+    outcome: allow
+  - id: deny-agent-pr
+    actor: agent
+    action: pull_request.*
+    outcome: deny
+  - id: deny-agent-merge
+    actor: agent
+    action: pull_request.merge
+    outcome: deny
+  - id: block-agent-threads
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: deny

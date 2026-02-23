@@ -1,0 +1,9 @@
+This project uses a dual-license structure:
+
+  Specification, schema, documentation, examples, and site:
+    CC0 1.0 Universal — see LICENSE-CC0
+    https://creativecommons.org/publicdomain/zero/1.0/
+
+  Source code, CLI, GitHub Action, and tests:
+    Zero-Clause BSD (0BSD) — see LICENSE-0BSD
+    https://opensource.org/license/0bsd

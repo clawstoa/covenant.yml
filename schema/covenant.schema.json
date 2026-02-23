@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stoa.dev/schemas/covenant.schema.json",
+  "title": "Covenant.yml v1.0.0 JSON Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec_version", "defaults", "rules"],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "pattern": "^1\\.\\d+\\.\\d+$"
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unmatched"],
+      "properties": {
+        "unmatched": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "actors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "humans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/humanActor"
+          }
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/agentActor"
+          }
+        },
+        "managers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/humanActor"
+          }
+        }
+      }
+    },
+    "surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/canonicalAction"
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "on_failure": {
+          "$ref": "#/$defs/decision"
+        },
+        "default_provenance_profile": {
+          "type": "string"
+        },
+        "provenance_profiles": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/provenanceProfile"
+          }
+        }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "covenant.attestation.v1"
+        },
+        "max_age_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "nonce_ttl_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "on_failure": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allow": {
+          "$ref": "#/$defs/enforcementActionList"
+        },
+        "warn": {
+          "$ref": "#/$defs/enforcementActionList"
+        },
+        "deny": {
+          "$ref": "#/$defs/enforcementActionList"
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "develop_bot_branch": {
+          "type": "string"
+        },
+        "on_deny_pull_request_open": {
+          "type": "string",
+          "enum": ["none", "reroute"]
+        }
+      }
+    },
+    "policies": {
+      "$ref": "#/$defs/policies"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "decision": {
+      "type": "string",
+      "enum": ["allow", "warn", "deny"]
+    },
+    "canonicalAction": {
+      "type": "string",
+      "enum": [
+        "issue.open",
+        "issue.comment",
+        "issue.label",
+        "issue.solve",
+        "pull_request.open",
+        "pull_request.update",
+        "pull_request.review.submit",
+        "pull_request.review.approve",
+        "pull_request.merge",
+        "conversation.intervene_human_thread",
+        "conversation.intervene_agent_thread",
+        "maintenance.cleanup",
+        "routing.to_develop_bot"
+      ]
+    },
+    "actorMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["usernames"],
+      "properties": {
+        "usernames": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "humanActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "match"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "match": {
+          "$ref": "#/$defs/actorMatch"
+        }
+      }
+    },
+    "agentActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "match"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "match": {
+          "$ref": "#/$defs/actorMatch"
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "public_key"],
+          "properties": {
+            "type": {
+              "const": "ed25519"
+            },
+            "public_key": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "actor", "action", "outcome"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "branch": {
+              "type": "string"
+            },
+            "thread_mode": {
+              "type": "string",
+              "enum": ["human", "agent", "mixed"]
+            }
+          }
+        },
+        "conditions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "labels_any": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "labels_all": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "repository_visibility": {
+              "type": "string",
+              "enum": ["public", "private"]
+            },
+            "thread_mode": {
+              "type": "string",
+              "enum": ["human", "agent", "mixed"]
+            }
+          }
+        },
+        "requirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provenance_profile": {
+              "type": "string"
+            },
+            "attestation": {
+              "type": "string",
+              "enum": ["required", "optional", "for_agents"]
+            },
+            "on_failure": {
+              "$ref": "#/$defs/decision"
+            }
+          }
+        },
+        "outcome": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "provenanceProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_fields"],
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["model", "provider", "prompt_record", "test_proof"]
+          }
+        },
+        "on_failure": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "enforcementActionList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/enforcementAction"
+      }
+    },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_eligible_labels": {
+          "$ref": "#/$defs/agentEligibleLabels"
+        }
+      }
+    },
+    "agentEligibleLabels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["labels"],
+      "properties": {
+        "labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/canonicalAction"
+          }
+        },
+        "on_missing": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "enforcementAction": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "message"],
+          "properties": {
+            "type": { "const": "comment" },
+            "message": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "labels"],
+          "properties": {
+            "type": { "const": "label" },
+            "labels": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "close_pull_request" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "delete_branch" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "branch"],
+          "properties": {
+            "type": { "const": "reroute_to_branch" },
+            "branch": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "context"],
+          "properties": {
+            "type": { "const": "fail_status" },
+            "context": { "type": "string", "minLength": 1 },
+            "description": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}

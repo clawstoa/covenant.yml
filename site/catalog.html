@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Policy Catalog | Covenant v1</title>
+  <meta name="description" content="Real-world AI contribution policies dissected and mapped to covenant.yml equivalents.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html">Overview</a>
+    <a href="./catalog.html" class="active">Catalog</a>
+    <a href="./operators.html">Operators</a>
+    <a href="./contribute.html">Contribute</a>
+    <a href="./spec.html">Spec</a>
+    <a href="./simulator.html">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Policy Catalog</p>
+    <h1>Real-world policies, deterministically mapped</h1>
+    <p class="lead">
+      Each entry dissects a project's AI contribution stance and translates it into a machine-readable <code>covenant.yml</code> equivalent.
+    </p>
+    <p class="lead">
+      For an updated cross-project list, see
+      <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Filter by Stance</h2>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn filter-accepting" data-filter="accepting">Accepting</button>
+        <button class="filter-btn filter-restricting" data-filter="restricting">Restricting</button>
+        <button class="filter-btn filter-rejecting" data-filter="rejecting">Rejecting</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Comparison Matrix</h2>
+      <p>
+        Some projects in this matrix are sourced from
+        <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
+        For an updated cross-project list, see
+        <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
+      </p>
+      <div class="table-wrap">
+        <table id="catalogTable">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Stance</th>
+              <th>Agent PRs</th>
+              <th>Agent Reviews</th>
+              <th>Issues</th>
+              <th>Human Threads</th>
+              <th>Provenance</th>
+              <th>Attestation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://docs.pola.rs/development/contributing/" target="_blank" rel="noopener">Polars</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>allow</td><td>allow</td><td>allow</td><td>warn</td>
+              <td>none</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://matplotlib.org/stable/devel/index.html" target="_blank" rel="noopener">Matplotlib</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>warn</td><td>allow</td><td>deny</td>
+              <td>model, provider</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://scipy.github.io/devdocs/dev/contributor/contributor_toc.html" target="_blank" rel="noopener">SciPy</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>allow</td><td>warn</td><td>allow</td><td>warn</td>
+              <td>model, provider</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://pandas.pydata.org/docs/development/contributing.html" target="_blank" rel="noopener">Pandas</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>warn</td><td>allow</td><td>deny</td>
+              <td>model, provider</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://docs.djangoproject.com/en/dev/internals/contributing/" target="_blank" rel="noopener">Django</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>warn</td><td>warn</td><td>deny</td>
+              <td>strict (all fields)</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://devguide.python.org/" target="_blank" rel="noopener">CPython</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>warn</td><td>warn</td><td>deny</td>
+              <td>model, provider</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://llvm.org/docs/Contributing.html" target="_blank" rel="noopener">LLVM</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>allow</td><td>allow</td><td>allow</td><td>warn</td>
+              <td>none</td><td>none</td>
+            </tr>
+            <tr data-stance="restricting">
+              <td><strong><a href="https://mail-index.netbsd.org/tech-kern/2023/02/01/msg028680.html" target="_blank" rel="noopener">NetBSD</a></strong></td>
+              <td><span class="stance-tag restricting">restricting</span></td>
+              <td>deny</td><td>deny</td><td>deny</td><td>deny</td>
+              <td>strict</td><td>required</td>
+            </tr>
+            <tr data-stance="rejecting">
+              <td><strong><a href="https://wiki.gentoo.org/wiki/Project:Council/AI_policy" target="_blank" rel="noopener">Gentoo Linux</a></strong></td>
+              <td><span class="stance-tag rejecting">rejecting</span></td>
+              <td>deny</td><td>deny</td><td>deny</td><td>deny</td>
+              <td>n/a</td><td>n/a</td>
+            </tr>
+            <tr data-stance="rejecting">
+              <td><strong><a href="https://lore.kernel.org/all/217f7b21-47ba-4a7e-bed5-869f2dbf16ebn@googlegroups.com/" target="_blank" rel="noopener">Linux man-pages</a></strong></td>
+              <td><span class="stance-tag rejecting">rejecting</span></td>
+              <td>deny</td><td>deny</td><td>deny</td><td>deny</td>
+              <td>n/a</td><td>n/a</td>
+            </tr>
+            <tr data-stance="rejecting">
+              <td><strong><a href="https://github.com/superseriousbusiness/gotosocial/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">GoToSocial</a></strong></td>
+              <td><span class="stance-tag rejecting">rejecting</span></td>
+              <td>deny</td><td>deny</td><td>deny</td><td>deny</td>
+              <td>n/a</td><td>n/a</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Example Policies</h2>
+      <p>Complete <code>covenant.yml</code> files based on real-world stances.</p>
+
+      <h3>Accepting (Polars-style)</h3>
+      <pre><code>spec_version: 1.0.0
+defaults:
+  unmatched: allow
+rules:
+  - id: agent-pr-open
+    actor: agent
+    action: pull_request.open
+    outcome: allow
+  - id: protect-human-threads
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: warn</code></pre>
+
+      <h3>Restricting (NetBSD-style)</h3>
+      <pre><code>spec_version: 1.0.0
+defaults:
+  unmatched: deny
+actors:
+  managers:
+    - id: core-team
+      match:
+        usernames: [netbsd-core]
+requirements:
+  on_failure: deny
+  default_provenance_profile: strict
+  provenance_profiles:
+    strict:
+      required_fields: [model, provider, prompt_record, test_proof]
+      on_failure: deny
+rules:
+  - id: manager-override
+    actor: manager
+    action: '*'
+    outcome: allow
+  - id: deny-agent-pr
+    actor: agent
+    action: pull_request.*
+    outcome: deny
+  - id: human-pr
+    actor: human
+    action: pull_request.open
+    outcome: allow</code></pre>
+
+      <h3>Rejecting (Gentoo-style)</h3>
+      <pre><code>spec_version: 1.0.0
+defaults:
+  unmatched: deny
+enforcement:
+  deny:
+    - type: comment
+      message: This repository does not accept AI-generated contributions.
+    - type: close_pull_request
+rules:
+  - id: human-all
+    actor: human
+    action: '*'
+    outcome: allow
+  - id: deny-agent-all
+    actor: agent
+    action: '*'
+    outcome: deny</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>Submit a Policy</h2>
+      <p>
+        Know a project with a defined AI contribution stance? Submit it for inclusion using the
+        <a href="https://github.com/clawstoa/covenant.yml/issues/new?template=policy-submission.yml">Policy Submission</a> issue template.
+        Submitted policies are validated against the Covenant.yml v1.0.0 schema before acceptance.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Additional Policy References</h2>
+      <ul>
+        <li><a href="https://github.com/Homebrew/brew/tree/main" target="_blank" rel="noopener">Homebrew</a>: <a href="https://github.com/Homebrew/brew/blob/main/CONTRIBUTING.md#artificial-intelligencelarge-language-model-aillm-usage" target="_blank" rel="noopener">(AI/LLM) usage</a></li>
+        <li><a href="https://github.com/mozilla-firefox/firefox" target="_blank" rel="noopener">Firefox</a>: <a href="https://firefox-source-docs.mozilla.org/contributing/ai-coding.html" target="_blank" rel="noopener">Firefox AI Coding Policy</a></li>
+        <li><a href="https://github.com/kornia/kornia/tree/main" target="_blank" rel="noopener">Kornia</a>: <a href="https://github.com/kornia/kornia/blob/main/AI_POLICY.md" target="_blank" rel="noopener">AI_POLICY.md</a></li>
+      </ul>
+      <h3>Projects severely restricting AI contributions</h3>
+      <ul>
+        <li><a href="https://gjs.guide/extensions/development/creating.html" target="_blank" rel="noopener">GNOME Extensions</a>: <a href="https://gjs.guide/extensions/review-guidelines/review-guidelines.html#extensions-must-not-be-ai-generated" target="_blank" rel="noopener">Review Guidelines</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+
+  <script src="./highlight.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var buttons = document.querySelectorAll(".filter-btn");
+    var rows = document.querySelectorAll("#catalogTable tbody tr");
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var filter = btn.getAttribute("data-filter");
+        buttons.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+
+        rows.forEach(function (row) {
+          if (filter === "all" || row.getAttribute("data-stance") === filter) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

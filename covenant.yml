@@ -1,0 +1,8 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: allow
+rules:
+  - id: allow-all
+    actor: any
+    action: '*'
+    outcome: allow

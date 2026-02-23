@@ -1,0 +1,20 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+enforcement:
+  warn:
+    - type: comment
+      message: Covenant warning for ${actor} on ${action}
+rules:
+  - id: open-issues
+    actor: any
+    action: issue.*
+    outcome: allow
+  - id: open-prs
+    actor: any
+    action: pull_request.*
+    outcome: allow
+  - id: protect-human-thread
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: warn

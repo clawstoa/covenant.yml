@@ -1,0 +1,8 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+rules:
+  - id: rule-1
+    actor: any
+    action: issue.magic
+    outcome: allow

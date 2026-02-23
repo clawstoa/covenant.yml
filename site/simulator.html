@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Simulation Lab | Covenant v1</title>
+  <meta name="description" content="Deterministic mass contribution simulation and policy compatibility replay for covenant.yml.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="simulator-page">
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html">Overview</a>
+    <a href="./catalog.html">Catalog</a>
+    <a href="./operators.html">Operators</a>
+    <a href="./contribute.html">Contribute</a>
+    <a href="./spec.html">Spec</a>
+    <a href="./simulator.html" class="active">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Simulation Lab</p>
+    <h1>Massive contribution replay for policy compatibility</h1>
+    <p class="lead">
+      Simulate high-volume repository activity, compare decisions across multiple policies, inspect rejection reasons over time,
+      and explore deterministic next-step branches.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>
+        Run Configuration
+        <span tabindex="0" aria-label="Run configuration help" class="help-tip" data-tip="Use the same seed to reproduce identical timelines across runs and policies.">?</span>
+      </h2>
+      <div class="sim-grid sim-controls">
+        <label title="How many synthetic repository events to generate. Higher values give better trend confidence.">Event count
+          <input id="simCount" type="number" min="1" max="10000" value="500">
+        </label>
+        <label title="Deterministic random seed. Same seed + same config => same timeline.">Seed
+          <input id="simSeed" type="text" value="1337">
+        </label>
+        <label title="Total simulated duration. Events are distributed across this window.">Window (hours)
+          <input id="simHours" type="number" min="1" max="8760" value="72">
+        </label>
+        <label title="Preset event and actor distributions. strict-stress increases denial-oriented pressure.">Profile
+          <select id="simProfile">
+            <option value="balanced">balanced</option>
+            <option value="churn">churn</option>
+            <option value="strict-stress">strict-stress</option>
+          </select>
+        </label>
+      </div>
+      <div class="sim-grid sim-faults">
+        <label title="Probability that one required provenance field is removed for an event.">Missing evidence
+          <input id="faultMissingEvidence" type="number" min="0" max="1" step="0.01" value="0.10">
+        </label>
+        <label title="Probability that agent attestation is omitted entirely.">Missing attestation
+          <input id="faultMissingAttestation" type="number" min="0" max="1" step="0.01" value="0.08">
+        </label>
+        <label title="Probability that attestation payload is malformed or mismatched.">Invalid attestation
+          <input id="faultInvalidAttestation" type="number" min="0" max="1" step="0.01" value="0.04">
+        </label>
+        <label title="Probability that eligible labels are removed from agent issue actions.">Ineligible issue label
+          <input id="faultIneligibleLabel" type="number" min="0" max="1" step="0.01" value="0.12">
+        </label>
+        <label title="Probability that thread mode is flipped to trigger conversation policy conflicts.">Thread mode mismatch
+          <input id="faultThreadMismatch" type="number" min="0" max="1" step="0.01" value="0.08">
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>
+        Policies (Side-by-Side)
+        <span tabindex="0" aria-label="Policy comparison help" class="help-tip" data-tip="All policies are evaluated against the exact same generated timeline to isolate policy effects.">?</span>
+      </h2>
+      <div class="playground-actions">
+        <button id="togglePolicyLayoutBtn" class="btn btn-secondary">Stack Editors</button>
+      </div>
+      <p>Three policy slots are replayed against the exact same generated timeline.</p>
+      <div class="sim-grid sim-policies">
+        <div>
+          <div class="editor-head">
+            <h3>Policy A</h3>
+            <div class="editor-head-meta">
+              <span class="editor-filename">policy-a.covenant.yml</span>
+              <button class="filter-btn download-editor-btn" data-target="policyAInput" data-filename="policy-a.covenant.yml" data-mime="text/yaml">Download</button>
+            </div>
+          </div>
+          <div class="lined-editor">
+            <div class="line-numbers" aria-hidden="true"></div>
+            <div class="editor-stage">
+              <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+              <textarea id="policyAInput" class="line-numbered code-entry" data-entry-lang="yaml" spellcheck="false" wrap="off"></textarea>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="editor-head">
+            <h3>Policy B</h3>
+            <div class="editor-head-meta">
+              <span class="editor-filename">policy-b.covenant.yml</span>
+              <button class="filter-btn download-editor-btn" data-target="policyBInput" data-filename="policy-b.covenant.yml" data-mime="text/yaml">Download</button>
+            </div>
+          </div>
+          <div class="lined-editor">
+            <div class="line-numbers" aria-hidden="true"></div>
+            <div class="editor-stage">
+              <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+              <textarea id="policyBInput" class="line-numbered code-entry" data-entry-lang="yaml" spellcheck="false" wrap="off"></textarea>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="editor-head">
+            <h3>Policy C</h3>
+            <div class="editor-head-meta">
+              <span class="editor-filename">policy-c.covenant.yml</span>
+              <button class="filter-btn download-editor-btn" data-target="policyCInput" data-filename="policy-c.covenant.yml" data-mime="text/yaml">Download</button>
+            </div>
+          </div>
+          <div class="lined-editor">
+            <div class="line-numbers" aria-hidden="true"></div>
+            <div class="editor-stage">
+              <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+              <textarea id="policyCInput" class="line-numbered code-entry" data-entry-lang="yaml" spellcheck="false" wrap="off"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <details>
+        <summary>Advanced Mapping Overrides (JSON)</summary>
+        <div class="editor-head">
+          <h3>Mapping Overrides</h3>
+          <div class="editor-head-meta">
+            <span class="editor-filename">mapping-overrides.json</span>
+            <button class="filter-btn download-editor-btn" data-target="mappingOverridesInput" data-filename="mapping-overrides.json" data-mime="application/json">Download</button>
+          </div>
+        </div>
+        <div class="lined-editor">
+          <div class="line-numbers" aria-hidden="true"></div>
+          <div class="editor-stage">
+            <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+            <textarea id="mappingOverridesInput" class="line-numbered code-entry" data-entry-lang="json" spellcheck="false" wrap="off">{
+  "release": "pull_request.merge",
+  "error_regression": "issue.comment"
+}</textarea>
+          </div>
+        </div>
+      </details>
+      <div class="playground-actions">
+        <button id="runSimulationBtn" class="btn btn-primary">Run Simulation</button>
+        <button id="exportJsonBtn" class="btn btn-secondary">Export JSON</button>
+        <button id="exportCsvBtn" class="btn btn-secondary">Export CSV</button>
+      </div>
+      <p id="simStatus" class="note"></p>
+    </section>
+
+    <section class="panel">
+      <h2>
+        Validation
+        <span tabindex="0" aria-label="Validation help" class="help-tip" data-tip="Validate policy syntax, mapping overrides, and run parameters before simulation.">?</span>
+      </h2>
+      <div class="playground-actions">
+        <button id="validateInputsBtn" class="btn btn-secondary">Validate Inputs</button>
+        <button id="downloadValidationBtn" class="btn btn-secondary">Download Report</button>
+      </div>
+      <pre id="simValidationOutput" class="output"></pre>
+    </section>
+
+    <section class="panel">
+      <h2>
+        Manual Action + Story Branches
+        <span tabindex="0" aria-label="Manual action help" class="help-tip" data-tip="Append targeted actions, then apply deterministic next-step suggestions to learn policy behavior.">?</span>
+      </h2>
+      <div class="sim-grid sim-controls">
+        <label>Simulator type
+          <select id="manualType">
+            <option value="code_evolution">code_evolution</option>
+            <option value="branch_operation">branch_operation</option>
+            <option value="issue_bug">issue_bug</option>
+            <option value="issue_feature_request">issue_feature_request</option>
+            <option value="discussion">discussion</option>
+            <option value="error_regression">error_regression</option>
+            <option value="release">release</option>
+            <option value="maintenance">maintenance</option>
+          </select>
+        </label>
+        <label>Actor kind
+          <select id="manualActorKind">
+            <option value="human">human</option>
+            <option value="agent">agent</option>
+            <option value="manager">manager</option>
+          </select>
+        </label>
+        <label>Branch
+          <input id="manualBranch" type="text" value="main">
+        </label>
+      </div>
+      <div class="playground-actions">
+        <button id="appendManualActionBtn" class="btn btn-secondary">Append Manual Action</button>
+      </div>
+      <div id="storyChoices" class="sim-story"></div>
+    </section>
+
+    <section class="panel">
+      <h2>
+        Metrics
+        <span tabindex="0" aria-label="Metrics help" class="help-tip" data-tip="Compare decision totals and disagreement rates. High disagreement means policies diverge on the same events.">?</span>
+      </h2>
+      <div id="simMetrics" class="sim-metrics-grid"></div>
+      <div id="simInterpretation" class="sim-insights"></div>
+      <pre id="simCrossPolicy" class="output"></pre>
+    </section>
+
+    <section class="panel">
+      <h2>
+        Logs
+        <span tabindex="0" aria-label="Logs help" class="help-tip" data-tip="Click any row to generate story choices from that event's decision outcomes.">?</span>
+      </h2>
+      <p>Event-by-event replay outcomes across all policy slots.</p>
+      <div class="table-wrap">
+        <table id="simLogsTable">
+          <thead>
+            <tr>
+              <th title="Sequential event index">#</th>
+              <th title="Simulated event timestamp">Timestamp</th>
+              <th title="High-level simulator event type">Type</th>
+              <th title="Canonical Covenant action used for evaluation">Action</th>
+              <th title="Actor identity and classification">Actor</th>
+              <th title="Injected faults applied to this event">Faults</th>
+              <th title="Per-policy decisions. Number in parentheses = reason code count.">Decisions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="note">Tip: hover labels and <code>?</code> icons for interpretation hints.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+
+  <script src="./highlight.js"></script>
+  <script src="./simulator.bundle.js"></script>
+  <script src="./simulator.js"></script>
+</body>
+</html>

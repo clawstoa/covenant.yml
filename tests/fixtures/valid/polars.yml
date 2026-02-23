@@ -1,0 +1,12 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: allow
+rules:
+  - id: agent-pr-open
+    actor: agent
+    action: pull_request.open
+    outcome: allow
+  - id: protect-human-threads
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: warn

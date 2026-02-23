@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Covenant v1 | Repository Governance Standard</title>
+  <meta name="description" content="Covenant v1 is a deterministic policy standard for agent and human contributions in repositories.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <nav class="site-nav">
+    <a href="./index.html" class="nav-brand"><span class="nav-brand-delta" aria-hidden="true">&#916;</span><span>covenant.yml</span></a>
+    <a href="./index.html" class="active">Overview</a>
+    <a href="./catalog.html">Catalog</a>
+    <a href="./operators.html">Operators</a>
+    <a href="./contribute.html">Contribute</a>
+    <a href="./spec.html">Spec</a>
+    <a href="./simulator.html">Simulator</a>
+    <div class="top-right-group">
+      <div class="dev-sticker">
+        <span class="dev-sticker-tag">v1.0.0</span>
+        <span class="dev-sticker-text">Under development</span>
+        <a href="https://github.com/clawstoa/covenant.yml/issues/1" target="_blank" rel="noopener">v2 discussion &rarr;</a>
+      </div>
+      <a href="https://github.com/clawstoa/covenant.yml" class="nav-github-corner" target="_blank" rel="noopener" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Shared rules for human and agent contributions</h1>
+    <p class="lead">
+      Define what humans and agents may do with deterministic policy, strict evidence requirements, and machine-verifiable outcomes.
+    </p>
+    <div class="cta-row">
+      <a href="#playground" class="btn btn-primary">Open Playground</a>
+      <a href="./spec.html" class="btn btn-secondary">Read Spec</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Core Principles</h2>
+      <ul>
+        <li>Deterministic evaluation, no hidden defaults.</li>
+        <li>Single canonical file location: <code>/covenant.yml</code>.</li>
+        <li>Strict outcomes: <code>allow</code>, <code>warn</code>, <code>deny</code>.</li>
+        <li>Programmatic provenance and attestation requirements.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Interaction Matrix</h2>
+      <p>
+        This matrix summarizes Covenant's canonical actions across actor kinds. Hover selected headers and action names for quick field explanations.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span title="Canonical action name evaluated by policy rules after event normalization.">Interaction</span></th>
+              <th><span title="Possible default outcomes for human actors after rule matching and requirements checks.">Human</span></th>
+              <th><span title="Possible default outcomes for agent actors after rule matching and requirements checks.">Agent</span></th>
+              <th><span title="Managers are often granted wide permissions for governance automation.">Manager</span></th>
+              <th><span title="Common controls used to enforce policy for this interaction (labels, provenance, attestation, thread mode, routing).">Typical Controls</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code title="Open a new issue.">issue.open</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>templates, labels, attestation</td></tr>
+            <tr><td><code title="Comment on an issue.">issue.comment</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>thread mode control</td></tr>
+            <tr><td><code title="Add or modify issue labels.">issue.label</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>auto-label policy</td></tr>
+            <tr><td><code title="Close or resolve an issue.">issue.solve</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>evidence policy</td></tr>
+            <tr><td><code title="Open a pull request.">pull_request.open</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>provenance and tests</td></tr>
+            <tr><td><code title="Update commits or metadata on an existing pull request.">pull_request.update</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>re-attestation</td></tr>
+            <tr><td><code title="Submit a pull request review.">pull_request.review.submit</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>reviewer policy</td></tr>
+            <tr><td><code title="Approve a pull request review state.">pull_request.review.approve</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>human-only gates</td></tr>
+            <tr><td><code title="Merge a pull request.">pull_request.merge</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>branch and ruleset checks</td></tr>
+            <tr><td><code title="Agent intervention in a human-labeled thread.">conversation.intervene_human_thread</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>human thread protection</td></tr>
+            <tr><td><code title="Intervention in an agent-labeled thread.">conversation.intervene_agent_thread</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>agent thread policy</td></tr>
+            <tr><td><code title="Maintenance operations such as close/relabel/delete branch.">maintenance.cleanup</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>close PR, delete branch</td></tr>
+            <tr><td><code title="Canonical routing action name in Covenant v1.">routing.to_develop_bot</code></td><td>allow/warn/deny</td><td>allow/warn/deny</td><td>allow</td><td>reroute to develop-bot branch</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="playground" class="panel">
+      <h2>Policy Playground</h2>
+      <p>
+        Paste <code>covenant.yml</code> and a canonical event JSON payload. The playground validates policy shape and simulates deterministic evaluation.
+      </p>
+      <div class="playground-grid">
+        <div>
+          <div class="editor-head">
+            <h3>Policy YAML</h3>
+            <div class="editor-head-meta">
+              <span class="editor-filename">playground-policy.covenant.yml</span>
+              <button class="filter-btn download-editor-btn" data-target="policyInput" data-filename="playground-policy.covenant.yml" data-mime="text/yaml">Download</button>
+            </div>
+          </div>
+          <div class="lined-editor">
+            <div class="line-numbers" aria-hidden="true"></div>
+            <div class="editor-stage">
+              <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+              <textarea id="policyInput" class="line-numbered code-entry" data-entry-lang="yaml" spellcheck="false" wrap="off"></textarea>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="editor-head">
+            <h3>Event JSON</h3>
+            <div class="editor-head-meta">
+              <span class="editor-filename">playground-event.json</span>
+              <button class="filter-btn download-editor-btn" data-target="eventInput" data-filename="playground-event.json" data-mime="application/json">Download</button>
+            </div>
+          </div>
+          <div class="lined-editor">
+            <div class="line-numbers" aria-hidden="true"></div>
+            <div class="editor-stage">
+              <pre class="editor-highlight" aria-hidden="true"><code></code></pre>
+              <textarea id="eventInput" class="line-numbered code-entry" data-entry-lang="json" spellcheck="false" wrap="off"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="playground-actions">
+        <button id="validateBtn" class="btn btn-secondary">Validate</button>
+        <button id="evaluateBtn" class="btn btn-primary">Evaluate</button>
+      </div>
+      <pre id="playgroundOutput" class="output"></pre>
+      <p class="note">Browser playground validates structure and rule matching. Cryptographic attestation must be verified in CI/CLI.</p>
+    </section>
+
+    <section class="panel">
+      <h2>CI-Verified Badge Set</h2>
+      <p>Every Covenant-enabled repository exposes five governance badges. This section renders every possible state, stacked by category, so maintainers can compare policy posture at a glance and avoid ambiguous badge usage.</p>
+      <p>Help text below focuses on the four policy-decision badges; <code>covenant-enabled</code> is always <code>enabled</code> when Covenant is active.</p>
+      <div class="badge-legend-grid">
+        <article class="badge-legend-item">
+          <h3><code>agent-pr-policy</code></h3>
+          <p>Shows the strictest policy outcome for agent-authored pull requests.</p>
+          <p class="badge-legend-examples">Practical example: a human asks an agent to open a PR; <code>allow</code> means it can proceed, <code>warn</code> means it opens with policy warnings, and <code>deny</code> means the PR is blocked.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>provenance-policy</code></h3>
+          <p>Shows whether a default provenance profile enforces evidence fields.</p>
+          <p class="badge-legend-examples">Practical example: an agent opens a PR; with <code>required</code> it must include evidence like <code>model</code> and <code>provider</code>, while <code>none</code> means those fields are not enforced.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>attestation-required</code></h3>
+          <p>Indicates whether cryptographic attestation signatures are required.</p>
+          <p class="badge-legend-examples">Practical example: when an agent submits a PR, <code>required</code> or <code>agents</code> means it must attach a valid signed attestation payload or policy checks fail.</p>
+        </article>
+        <article class="badge-legend-item">
+          <h3><code>thread-intervention-policy</code></h3>
+          <p>Shows whether intervention in human threads is restricted.</p>
+          <p class="badge-legend-examples">Practical example: in a human-only incident thread, <code>controlled</code> means an agent comment is warned or denied unless explicitly allowed.</p>
+        </article>
+      </div>
+
+      <div class="badge-catalog">
+        <div class="badge-category">
+          <h3>covenant</h3>
+          <div class="badge-stack">
+            <img src="./badges/covenant/covenant-enabled.svg" alt="covenant: enabled" width="420" height="70">
+          </div>
+        </div>
+
+        <div class="badge-category">
+          <h3>agent-pr-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/agent-pr-policy/allow.svg" alt="agent-pr-policy: allow" width="420" height="70">
+            <img src="./badges/agent-pr-policy/warn.svg" alt="agent-pr-policy: warn" width="420" height="70">
+            <img src="./badges/agent-pr-policy/deny.svg" alt="agent-pr-policy: deny" width="420" height="70">
+            <img src="./badges/agent-pr-policy/none.svg" alt="agent-pr-policy: none" width="420" height="70">
+          </div>
+        </div>
+
+        <div class="badge-category">
+          <h3>provenance-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/provenance-policy/required.svg" alt="provenance-policy: required" width="420" height="70">
+            <img src="./badges/provenance-policy/configured.svg" alt="provenance-policy: configured" width="420" height="70">
+            <img src="./badges/provenance-policy/none.svg" alt="provenance-policy: none" width="420" height="70">
+          </div>
+        </div>
+
+        <div class="badge-category">
+          <h3>attestation-required</h3>
+          <div class="badge-stack">
+            <img src="./badges/attestation-required/required.svg" alt="attestation-required: required" width="420" height="70">
+            <img src="./badges/attestation-required/agents.svg" alt="attestation-required: agents" width="420" height="70">
+            <img src="./badges/attestation-required/none.svg" alt="attestation-required: none" width="420" height="70">
+          </div>
+        </div>
+
+        <div class="badge-category">
+          <h3>thread-intervention-policy</h3>
+          <div class="badge-stack">
+            <img src="./badges/thread-intervention-policy/controlled.svg" alt="thread-intervention-policy: controlled" width="420" height="70">
+            <img src="./badges/thread-intervention-policy/open.svg" alt="thread-intervention-policy: open" width="420" height="70">
+          </div>
+        </div>
+      </div>
+
+      <p class="note">Embed these directly from GitHub raw URLs in READMEs, docs, and dashboards. See <a href="https://github.com/clawstoa/covenant.yml/blob/main/docs/BADGES.md">docs/BADGES.md</a> for copy/paste snippets.</p>
+    </section>
+
+    <section class="panel">
+      <h2>For Agent Operators</h2>
+      <ol>
+        <li>Fetch and parse <code>/covenant.yml</code> before any action.</li>
+        <li>Normalize planned action to Covenant canonical action names.</li>
+        <li>Check effective rule outcome and requirements.</li>
+        <li>If attestation is required, sign <code>covenant.attestation.v1</code> payload.</li>
+        <li>Attach evidence fields and attestation to contribution metadata.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-credit">A project by the <a href="https://clawstoa.com" target="_blank" rel="noopener">clawstoa.com</a> community: <a href="https://github.com/clawstoa" target="_blank" rel="noopener">Αἱ Στοαί</a></p>
+    <p class="footer-license">Licenses: docs/spec/site under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-CC0" target="_blank" rel="noopener">CC0-1.0</a>; code/CLI/action/tests under <a href="https://github.com/clawstoa/covenant.yml/blob/main/LICENSE-0BSD" target="_blank" rel="noopener">0BSD</a>.</p>
+    <p class="footer-motto">Ἐνθάδε ὁ κόμβος τοῦ κοινοῦ δικτύου ἀνθρώπων καὶ αὐτομάτων κεῖται</p>
+  </footer>
+
+  <script src="./highlight.js"></script>
+  <script src="./playground.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+name: Covenant Enforce
+
+on:
+  issues:
+    types: [opened, closed, labeled, unlabeled]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, reopened, synchronize, edited, closed]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  covenant:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./. 
+        id: covenant
+        with:
+          policy-path: covenant.yml
+          mode: enforce
+      - name: Print decision
+        run: |
+          echo "Decision: ${{ steps.covenant.outputs.decision }}"
+          echo "Reasons: ${{ steps.covenant.outputs.reason_codes }}"
+          echo "Actions: ${{ steps.covenant.outputs.enforcement_actions }}"

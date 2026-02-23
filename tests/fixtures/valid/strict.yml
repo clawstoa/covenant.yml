@@ -1,0 +1,74 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+actors:
+  humans:
+    - id: maintainer
+      match:
+        usernames: [alice, bob]
+  agents:
+    - id: ci-bot
+      match:
+        usernames: [ci-bot[bot]]
+      verification:
+        type: ed25519
+        # TEST FIXTURE ONLY — not a valid Ed25519 key. Replace with a real public key for production use.
+        public_key: MCoGCSqGSIb3DQEBAQUAAyEA7wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+  managers:
+    - id: stoa-manager
+      match:
+        usernames: [stoa-manager[bot]]
+requirements:
+  on_failure: deny
+  default_provenance_profile: strict
+  provenance_profiles:
+    strict:
+      required_fields: [model, provider, prompt_record, test_proof]
+      on_failure: deny
+attestation:
+  contract: covenant.attestation.v1
+  max_age_seconds: 900
+  nonce_ttl_seconds: 3600
+  on_failure: deny
+enforcement:
+  warn:
+    - type: comment
+      message: Policy warning for ${actor} on ${action}. reason=${reason_codes}
+  deny:
+    - type: comment
+      message: Policy denied for ${actor} on ${action}. reason=${reason_codes}
+    - type: fail_status
+      context: covenant/policy
+      description: Covenant decision is ${decision}
+routing:
+  develop_bot_branch: develop-bot
+  on_deny_pull_request_open: reroute
+rules:
+  - id: manager-override
+    actor: manager
+    action: '*'
+    outcome: allow
+  - id: block-agent-human-thread
+    actor: agent
+    action: conversation.intervene_human_thread
+    outcome: deny
+  - id: strict-agent-pr
+    actor: agent
+    action: pull_request.open
+    target:
+      branch: main
+    requirements:
+      provenance_profile: strict
+      attestation: required
+      on_failure: deny
+    outcome: warn
+  - id: allow-human-pr
+    actor: human
+    action: pull_request.open
+    target:
+      branch: main
+    requirements:
+      provenance_profile: strict
+      attestation: optional
+      on_failure: deny
+    outcome: allow

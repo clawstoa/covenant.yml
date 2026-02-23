@@ -1,0 +1,9 @@
+spec_version: 1.0.0
+defaults:
+  unmatched: warn
+unknown_key: true
+rules:
+  - id: rule-1
+    actor: any
+    action: issue.open
+    outcome: allow

@@ -1,0 +1,41 @@
+name: Policy Update
+description: Report a change to an existing project's AI contribution policy.
+labels: ["policy-update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when a project already in the catalog has changed its AI contribution policy.
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project name
+      placeholder: e.g., NumPy
+    validations:
+      required: true
+
+  - type: input
+    id: source_url
+    attributes:
+      label: Updated policy source URL
+      description: Link to the new or revised policy.
+    validations:
+      required: true
+
+  - type: textarea
+    id: change_description
+    attributes:
+      label: What changed
+      description: Describe the policy change and how the covenant.yml mapping should be updated.
+    validations:
+      required: true
+
+  - type: textarea
+    id: updated_mapping
+    attributes:
+      label: Updated covenant.yml mapping
+      description: The revised Covenant v1 YAML policy.
+      render: yaml
+    validations:
+      required: true

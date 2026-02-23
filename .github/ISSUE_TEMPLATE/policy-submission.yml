@@ -1,0 +1,72 @@
+name: Policy Submission
+description: Submit a dissected AI contribution policy for inclusion in the catalog.
+labels: ["policy-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit a real-world AI contribution policy mapped to a `covenant.yml` equivalent.
+        The proposed YAML will be validated against the Covenant v1 schema.
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project name
+      placeholder: e.g., NumPy
+    validations:
+      required: true
+
+  - type: input
+    id: project_url
+    attributes:
+      label: Project URL
+      placeholder: e.g., https://github.com/numpy/numpy
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stance
+    attributes:
+      label: Policy stance
+      options:
+        - accepting
+        - restricting
+        - rejecting
+    validations:
+      required: true
+
+  - type: input
+    id: policy_source
+    attributes:
+      label: Policy source URL
+      description: Link to the project's AI contribution policy or relevant discussion.
+      placeholder: e.g., https://numpy.org/doc/stable/dev/index.html
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Policy summary
+      description: One to three sentences describing the project's AI contribution stance.
+      placeholder: Describe the key rules and requirements.
+    validations:
+      required: true
+
+  - type: textarea
+    id: covenant_mapping
+    attributes:
+      label: Proposed covenant.yml mapping
+      description: A valid Covenant v1 YAML policy representing this project's stance.
+      render: yaml
+      placeholder: |
+        spec_version: 1.0.0
+        defaults:
+          unmatched: warn
+        rules:
+          - id: example-rule
+            actor: agent
+            action: pull_request.open
+            outcome: warn
+    validations:
+      required: true
