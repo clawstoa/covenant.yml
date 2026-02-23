@@ -38,10 +38,6 @@
     <p class="lead">
       Each entry dissects a project's AI contribution stance and translates it into a machine-readable <code>covenant.yml</code> equivalent.
     </p>
-    <p class="lead">
-      For an updated cross-project list, see
-      <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
-    </p>
   </header>
 
   <main>
@@ -58,9 +54,7 @@
     <section class="panel">
       <h2>Comparison Matrix</h2>
       <p>
-        Some projects in this matrix are sourced from
-        <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
-        For an updated cross-project list, see
+        Some projects in this matrix were sourced from
         <a href="https://github.com/melissawm/open-source-ai-contribution-policies" target="_blank" rel="noopener">open-source-ai-contribution-policies</a>.
       </p>
       <div class="table-wrap">
@@ -120,11 +114,35 @@
               <td>allow</td><td>allow</td><td>allow</td><td>warn</td>
               <td>none</td><td>none</td>
             </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://github.com/Homebrew/brew/blob/main/CONTRIBUTING.md#artificial-intelligencelarge-language-model-aillm-usage" target="_blank" rel="noopener">Homebrew</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>allow</td><td>warn</td><td>warn</td>
+              <td>model, provider</td><td>none</td>
+            </tr>
+            <tr data-stance="accepting">
+              <td><strong><a href="https://firefox-source-docs.mozilla.org/contributing/ai-coding.html" target="_blank" rel="noopener">Firefox</a></strong></td>
+              <td><span class="stance-tag accepting">accepting</span></td>
+              <td>warn</td><td>warn</td><td>allow</td><td>warn</td>
+              <td>none</td><td>none</td>
+            </tr>
             <tr data-stance="restricting">
               <td><strong><a href="https://mail-index.netbsd.org/tech-kern/2023/02/01/msg028680.html" target="_blank" rel="noopener">NetBSD</a></strong></td>
               <td><span class="stance-tag restricting">restricting</span></td>
               <td>deny</td><td>deny</td><td>deny</td><td>deny</td>
               <td>strict</td><td>required</td>
+            </tr>
+            <tr data-stance="restricting">
+              <td><strong><a href="https://github.com/kornia/kornia/blob/main/AI_POLICY.md" target="_blank" rel="noopener">Kornia</a></strong></td>
+              <td><span class="stance-tag restricting">restricting</span></td>
+              <td>warn</td><td>allow</td><td>allow</td><td>deny</td>
+              <td>strict (all fields)</td><td>required</td>
+            </tr>
+            <tr data-stance="restricting">
+              <td><strong><a href="https://gjs.guide/extensions/review-guidelines/review-guidelines.html#extensions-must-not-be-ai-generated" target="_blank" rel="noopener">GNOME Extensions</a></strong></td>
+              <td><span class="stance-tag restricting">restricting</span></td>
+              <td>deny</td><td>deny</td><td>allow</td><td>deny</td>
+              <td>none</td><td>none</td>
             </tr>
             <tr data-stance="rejecting">
               <td><strong><a href="https://wiki.gentoo.org/wiki/Project:Council/AI_policy" target="_blank" rel="noopener">Gentoo Linux</a></strong></td>
@@ -226,18 +244,6 @@ rules:
       </p>
     </section>
 
-    <section class="panel">
-      <h2>Additional Policy References</h2>
-      <ul>
-        <li><a href="https://github.com/Homebrew/brew/tree/main" target="_blank" rel="noopener">Homebrew</a>: <a href="https://github.com/Homebrew/brew/blob/main/CONTRIBUTING.md#artificial-intelligencelarge-language-model-aillm-usage" target="_blank" rel="noopener">(AI/LLM) usage</a></li>
-        <li><a href="https://github.com/mozilla-firefox/firefox" target="_blank" rel="noopener">Firefox</a>: <a href="https://firefox-source-docs.mozilla.org/contributing/ai-coding.html" target="_blank" rel="noopener">Firefox AI Coding Policy</a></li>
-        <li><a href="https://github.com/kornia/kornia/tree/main" target="_blank" rel="noopener">Kornia</a>: <a href="https://github.com/kornia/kornia/blob/main/AI_POLICY.md" target="_blank" rel="noopener">AI_POLICY.md</a></li>
-      </ul>
-      <h3>Projects severely restricting AI contributions</h3>
-      <ul>
-        <li><a href="https://gjs.guide/extensions/development/creating.html" target="_blank" rel="noopener">GNOME Extensions</a>: <a href="https://gjs.guide/extensions/review-guidelines/review-guidelines.html#extensions-must-not-be-ai-generated" target="_blank" rel="noopener">Review Guidelines</a></li>
-      </ul>
-    </section>
   </main>
 
   <footer>
