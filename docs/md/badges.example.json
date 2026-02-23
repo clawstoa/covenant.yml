@@ -1,0 +1,32 @@
+{
+  "covenant-enabled": {
+    "schemaVersion": 1,
+    "label": "covenant",
+    "message": "enabled",
+    "color": "#2f855a"
+  },
+  "agent-pr-policy": {
+    "schemaVersion": 1,
+    "label": "agent-pr",
+    "message": "warn",
+    "color": "#b7791f"
+  },
+  "provenance-policy": {
+    "schemaVersion": 1,
+    "label": "provenance",
+    "message": "required",
+    "color": "#2f855a"
+  },
+  "attestation-required": {
+    "schemaVersion": 1,
+    "label": "attestation",
+    "message": "required",
+    "color": "#2f855a"
+  },
+  "thread-intervention-policy": {
+    "schemaVersion": 1,
+    "label": "thread-mode",
+    "message": "controlled",
+    "color": "#2f855a"
+  }
+}
