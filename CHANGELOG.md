@@ -62,6 +62,3 @@ Covenant v1 follows a strict compatibility commitment:
 - Minor releases (`1.x.0`): additive schema extensions; existing valid policies remain valid.
 - Major releases (`2.0.0`): may include breaking schema changes; migration guide will be provided.
 
----
-
-*Earlier internal development history is in `.internal/covenant-plan.md`.*
